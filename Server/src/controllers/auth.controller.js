@@ -16,7 +16,7 @@ async function register(req, res) {
     });
     await user.save();
     const token = jwt.sign({ username: username }, process.env.JWT_KEY, {
-      expiresIn: 30,
+      expiresIn: "30d",
     });
     res.status(201).json({ token: token });
   } catch (error) {
@@ -33,7 +33,7 @@ async function login(req, res) {
     const is_true = await bcrypt.compare(password, is_user.password);
     if (!is_true) return res.status(400).json({ message: "Invalid Password" });
     const token = jwt.sign({ username: username }, process.env.JWT_KEY, {
-      expiresIn: 30,
+      expiresIn: "30d",
     });
     res.status(201).json({ token: token });
   } catch (error) {
