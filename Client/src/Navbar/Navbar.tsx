@@ -3,27 +3,44 @@ import logo from "/favicon.ico";
 import Dropdown from "../components/Dropdown";
 import type { DropdownType } from "../types/Dropdown.types";
 import { Outlet } from "react-router";
-import { Webappcontext } from "../Context/Webapp";
+import { WebappContext } from "../Context/Webapp";
+import Iconbutton from "../components/Iconbutton";
+import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 
 function Navbar(): React.ReactNode {
   const data: DropdownType = {
     MainHeading: "options",
     DropdownArray: [
-      { text: "home", link: "/home" },
-      { text: "account", link: "/account" },
+      { text: "home", link: "/user-home" },
       { text: "upload", link: "/upload" },
+      { text: "account", link: "/account" },
     ],
   };
-  const theme = useContext(Webappcontext);
+  const theme = useContext(WebappContext);
   return (
-    <div className={`${theme?.Theme}`}>
-      <nav className="m-2 flex items-center justify-between sm:justify-around">
+    <div
+      className={`${theme.Theme} h-screen dark:bg-slate-800 bg-gray-200 transition-colors`}
+    >
+      <nav className="mx-2 py-2 flex items-center justify-between sm:justify-around">
         <img className="w-8 md:w-10 h-auto" src={logo} alt="" />
-        <span className="hidden sm:flex flex-col gap-2 justify-center items-center">
-          <h1 className="dark:text-red-500 text-blue-500">Drop Fest</h1>
-          <p>Save your file safely</p>
+        <span className="flex flex-col gap-1 justify-center items-center">
+          <h1 className="dark:text-cyan-500 text-red-500 text-xl sm:text-2xl md:text-3xl font-bold">
+            Drop Fest
+          </h1>
+          <p className="hidden dark:text-white text-black font  sm:flex">
+            Save your files safely in cloud
+          </p>
         </span>
-        <Dropdown data={data} />
+        <div className="flex justify-center items-center">
+          <Dropdown data={data} />
+          <Iconbutton
+            cname="btn-primary dark:btn-error"
+            func={theme.ChangeTheme}
+            icon1={<MdOutlineLightMode />}
+            isnormal={false}
+            icon2={<MdOutlineDarkMode />}
+          />
+        </div>
       </nav>
       <Outlet />
     </div>
