@@ -5,3 +5,9 @@ export interface UserFileType {
   filepublicid: string;
   filetype: string;
 }
+
+export interface UserAuthType {
+  name?: string;
+  username: string;
+  password: string;
+}

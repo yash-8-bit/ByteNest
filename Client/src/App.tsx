@@ -5,7 +5,7 @@ import Home from "./Pages/Home";
 import Upload from "./Pages/Upload";
 import Account from "./Pages/Account";
 import { Webapp } from "./Context/Webapp";
-import Sign from "./Pages/Sign";
+import Authform from "./Pages/Authform";
 import UserHome from "./Pages/UserHome";
 
 function App() {
@@ -19,7 +19,11 @@ function App() {
             <Route path="/account" element={<Account />} />
           </Route>
           <Route path="/home" element={<Home />} />
-          <Route path="/sign" element={<Sign />} />
+          <Route path="/account-login" element={<Authform type="login" />} />
+          <Route
+            path="/account-register"
+            element={<Authform type="register" />}
+          />
         </Routes>
       </Webapp>
     </BrowserRouter>

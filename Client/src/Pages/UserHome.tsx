@@ -3,6 +3,7 @@ import type { UserFileType } from "../types/user.type";
 import Iconbutton from "../components/Iconbutton";
 import { BiDownload } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import { tc } from "../components/style/main";
 
 const List = ({ data }: { data: UserFileType[] }) => {
   return (
@@ -24,16 +25,9 @@ const List = ({ data }: { data: UserFileType[] }) => {
                 {eachdata.filetype}
               </p>
             </div>
-            <Iconbutton
-              cname="btn-info btn-sm"
-              func={() => {}}
-              isnormal={true}
-              icon1={<BiDownload />}
-            />
+            <Iconbutton cname="btn-info btn-sm" icon1={<BiDownload />} />
             <Iconbutton
               cname="bg-red-500 btn-sm border-0 hover:bg-red-400"
-              func={() => {}}
-              isnormal={true}
               icon1={<MdDelete />}
             />
           </li>
@@ -49,7 +43,7 @@ function UserHome() {
     <div className="flex justify-center px-3">
       <div className="w-[50rem]">
         {data.length == 0 ? (
-          <p className="dark:text-white font-bold text-3xl text-center text-black">
+          <p className={`${tc} font-bold text-3xl text-center `}>
             No File uploded yet
           </p>
         ) : (

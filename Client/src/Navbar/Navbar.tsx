@@ -6,6 +6,7 @@ import { Outlet } from "react-router";
 import { WebappContext } from "../Context/Webapp";
 import Iconbutton from "../components/Iconbutton";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
+import { commonbg, tc } from "../components/style/main";
 
 function Navbar(): React.ReactNode {
   const data: DropdownType = {
@@ -18,16 +19,14 @@ function Navbar(): React.ReactNode {
   };
   const theme = useContext(WebappContext);
   return (
-    <div
-      className={`${theme.Theme} h-screen dark:bg-slate-800 bg-gray-200 transition-colors`}
-    >
+    <div className={`${theme.Theme} ${commonbg} h-screen transition-colors`}>
       <nav className="mx-2 py-2 flex items-center justify-between sm:justify-around">
         <img className="w-8 md:w-10 h-auto" src={logo} alt="" />
         <span className="flex flex-col gap-1 justify-center items-center">
           <h1 className="dark:text-cyan-500 text-red-500 text-xl sm:text-2xl md:text-3xl font-bold">
             Drop Fest
           </h1>
-          <p className="hidden dark:text-white text-black font  sm:flex">
+          <p className={`hidden ${tc} font  sm:flex`}>
             Save your files safely in cloud
           </p>
         </span>

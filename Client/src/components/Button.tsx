@@ -1,21 +1,27 @@
 import React, { useState } from "react";
 import type { ButtonType } from "../types/button.type";
 
-function Button(props: ButtonType) {
+function Button({
+  loading = false,
+  func = () => {},
+  type = "button",
+  text,
+  cname = "",
+}: ButtonType) {
   const [isloading, setIsLoading] = useState<boolean>(false);
   const handleClick = () => {
-    if (props.loading) {
+    if (loading) {
       setIsLoading((data) => !data);
-      props.func();
+      func();
       setIsLoading((data) => !data);
     } else {
-      props.func();
+      func();
     }
   };
   return (
-    <button onClick={handleClick} className={`btn ${props.cname}`}>
+    <button type={type} onClick={handleClick} className={`btn ${cname}`}>
       {isloading && <span className="loading loading-spinner"></span>}
-      {props.text}
+      {text}
     </button>
   );
 }
