@@ -4,6 +4,7 @@ import Iconbutton from "../components/Iconbutton";
 import { BiDownload } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { tc } from "../components/style/main";
+import Alert from "../components/Alert";
 
 const List = ({ data }: { data: UserFileType[] }) => {
   return (
@@ -38,7 +39,7 @@ const List = ({ data }: { data: UserFileType[] }) => {
 };
 
 function UserHome() {
-  const [data, setdata] = useState<UserFileType[]>([]);
+  const [data, setData] = useState<UserFileType[]>([]);
   return (
     <div className="flex justify-center px-3">
       <div className="w-[50rem]">
