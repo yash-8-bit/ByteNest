@@ -17,9 +17,9 @@ function Navbar(): React.ReactNode {
       { text: "account", link: "/account" },
     ],
   };
-  const theme = useContext(WebappContext);
+  const context = useContext(WebappContext);
   return (
-    <div className={`${theme.Theme} ${commonbg} h-screen transition-colors`}>
+    <div className={`${context.Theme} ${commonbg} h-screen transition-colors`}>
       <nav className="mx-2 py-2 flex items-center justify-between sm:justify-around">
         <img className="w-8 md:w-10 h-auto" src={logo} alt="" />
         <span className="flex flex-col gap-1 justify-center items-center">
@@ -34,7 +34,7 @@ function Navbar(): React.ReactNode {
           <Dropdown data={data} />
           <Iconbutton
             cname="btn-primary dark:btn-error"
-            func={theme.ChangeTheme}
+            func={context.ChangeTheme}
             icon1={<MdOutlineLightMode />}
             isnormal={false}
             icon2={<MdOutlineDarkMode />}

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import Userfile from "../models/Userfile.js";
 
 async function register(req, res) {
   try {
@@ -18,7 +19,7 @@ async function register(req, res) {
     const token = jwt.sign({ username: username }, process.env.JWT_KEY, {
       expiresIn: "30d",
     });
-    res.status(201).json({ token: token });
+    res.status(201).json({ message: "Register Sucessfull", token: token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Try Again Later.." });
@@ -35,11 +36,23 @@ async function login(req, res) {
     const token = jwt.sign({ username: username }, process.env.JWT_KEY, {
       expiresIn: "30d",
     });
-    res.status(201).json({ token: token });
+    res.status(201).json({ message: "Login Sucessfull", token: token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Try Again Later.." });
   }
 }
 
-export default { login, register };
+async function Delete(req, res) {
+  try {
+    const username = req.user;
+    await User.deleteOne({ username: username });
+    await Userfile.deleteMany({ username: username });
+    res.status(200).json({ message: "Account Delete Sucessfull" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Try Again Later.." });
+  }
+}
+
+export default { login, register, Delete };

@@ -2,8 +2,8 @@ import React, { createContext, useState } from "react";
 import type { Theme, WebappType } from "../types/context.type";
 
 const WebappContext = createContext<WebappType>({
-  Theme:"light",
-  ChangeTheme : ()=>{}
+  Theme: "light",
+  ChangeTheme: () => {},
 });
 
 function Webapp({ children }: { children: React.ReactNode }) {

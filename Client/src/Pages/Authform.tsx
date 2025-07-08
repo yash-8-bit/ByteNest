@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, type FormEvent } from "react";
 import Button from "../components/Button";
 import type { UserAuthType } from "../types/user.type";
 import Input from "../components/Input";
@@ -8,6 +8,7 @@ import { Link } from "react-router";
 import Iconbutton from "../components/Iconbutton";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import Alert from "../components/Alert";
+import { useLogin, useRegister } from "../apis/userauth.api";
 
 function Authform({ type }: { type: string }) {
   const [formdata, setFormdata] = useState<UserAuthType>({
@@ -15,16 +16,28 @@ function Authform({ type }: { type: string }) {
     username: "",
     password: "",
   });
-  const theme = useContext(WebappContext);
-  const handlelogin = () => {
-    alert("login");
+  const context = useContext(WebappContext);
+  const handlelogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const data = await useLogin(formdata);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const handleregitser = () => {
-    alert("register");
+  const handleregitser = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const data = await useRegister(formdata);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div
-      className={`${theme.Theme} transition-all flex-col flex ${commonbg} justify-center items-center h-screen`}
+      className={`${context.Theme} transition-all flex-col flex ${commonbg} justify-center items-center h-screen`}
     >
       <div className="dark:border-white/50 border-black/30 border-4  rounded-xl ">
         <div className="p-3 items-center flex">
@@ -33,7 +46,7 @@ function Authform({ type }: { type: string }) {
           </h1>
           <Iconbutton
             cname="btn-primary dark:btn-error btn-xs"
-            func={theme.ChangeTheme}
+            func={context.ChangeTheme}
             icon1={<MdOutlineLightMode />}
             isnormal={false}
             icon2={<MdOutlineDarkMode />}

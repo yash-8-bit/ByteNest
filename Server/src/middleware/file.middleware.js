@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "../../", "tmpfile"));
   },
   filename: function (req, file, cb) {
-    cb(null,   req.user + "_x_" + path.extname(file.originalname));
+    cb(null, req.user + "_x_" + path.extname(file.originalname));
   },
 });
 
