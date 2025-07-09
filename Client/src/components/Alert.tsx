@@ -1,13 +1,21 @@
 import React from "react";
 import type { AlertType } from "../types/alert.type";
-import Button from "./Button";
 
-function Alert({ cname = "", text, setalertshow }: AlertType) {
+function Alert({ cname = "", text, action }: AlertType) {
   return (
-    <div className="fixed flex justify-center items-center size-full backdrop-blur-xs">
-      <div role="alert" className={`alert ${cname}`}>
-        <span className="font text-base md:text-xl">{text}</span>
-        <Button text="ok" cname="btn-xs" func={setalertshow} />
+    <div
+      className="fixed flex-col flex justify-center items-center size-full
+     bg-black/50 z-10"
+    >
+      <div
+        role="alert"
+        className={`alert hover:scale-105 transition-all font
+         text-base ${cname}`}
+      >
+        <span>{text}</span>
+        <button className="cursor-pointer hover:text-white" onClick={action}>
+          OK
+        </button>
       </div>
     </div>
   );

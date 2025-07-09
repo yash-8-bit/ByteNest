@@ -11,3 +11,8 @@ export interface UserAuthType {
   username: string;
   password: string;
 }
+
+export interface User {
+  name: string;
+  username: string;
+}

@@ -1,45 +1,114 @@
-import React, { useContext, useState, type FormEvent } from "react";
+import { useContext, useState, type FormEvent } from "react";
 import Button from "../components/Button";
 import type { UserAuthType } from "../types/user.type";
 import Input from "../components/Input";
 import { WebappContext } from "../Context/Webapp";
 import { commonbg, tc } from "../components/style/main";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Iconbutton from "../components/Iconbutton";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import Alert from "../components/Alert";
 import { useLogin, useRegister } from "../apis/userauth.api";
+import type { AlertType } from "../types/alert.type";
 
 function Authform({ type }: { type: string }) {
+  const navigate = useNavigate();
   const [formdata, setFormdata] = useState<UserAuthType>({
     name: "",
     username: "",
     password: "",
   });
+  const [infoobj, setInfoobj] = useState<AlertType>({
+    text: "",
+    action: () => {},
+    cname: "",
+  });
+  const [show, setShow] = useState<boolean>(false);
   const context = useContext(WebappContext);
   const handlelogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const data = await useLogin(formdata);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+      setShow(true);
+      setInfoobj({
+        text: data.message,
+        action: () => {
+          navigate("/user-home");
+          setShow(false);
+        },
+        cname: "alert-success",
+      });
+    } catch (error: any) {
+      setShow(true);
+      if (error.response && error.response.data) {
+        setInfoobj({
+          text: error.response.data.message,
+          action: () => {
+            navigate("/account-login");
+            setShow(false);
+          },
+          cname: "alert-error",
+        });
+        return;
+      }
+      setInfoobj({
+        text: error.message,
+        action: () => {
+          navigate("/account-login");
+          setShow(false);
+        },
+        cname: "alert-error",
+      });
     }
   };
   const handleregitser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const data = await useRegister(formdata);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+      setShow(true);
+      setInfoobj({
+        text: data.message,
+        action: () => {
+          navigate("/user-home");
+          setShow(false);
+        },
+        cname: "alert-success",
+      });
+    } catch (error: any) {
+      setShow(true);
+      if (error.response && error.response.data) {
+        setInfoobj({
+          text: error.response.data.message,
+          action: () => {
+            navigate("/account-register");
+            setShow(false);
+          },
+          cname: "alert-error",
+        });
+        return;
+      }
+      setInfoobj({
+        text: error.message,
+        action: () => {
+          navigate("/account-register");
+          setShow(false);
+        },
+        cname: "alert-error",
+      });
     }
   };
   return (
     <div
       className={`${context.Theme} transition-all flex-col flex ${commonbg} justify-center items-center h-screen`}
     >
-      <div className="dark:border-white/50 border-black/30 border-4  rounded-xl ">
+      {show && (
+        <Alert
+          cname={infoobj.cname}
+          text={infoobj.text}
+          action={infoobj.action}
+        />
+      )}
+      <div className="dark:border-white/50  border-black/30 border-4  rounded-xl ">
         <div className="p-3 items-center flex">
           <h1 className={`${tc} w-full text-center tracking-widest`}>
             Drop-Fest

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { UserFileType } from "../types/user.type";
 import Iconbutton from "../components/Iconbutton";
 import { BiDownload } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { tc } from "../components/style/main";
 import Alert from "../components/Alert";
+import { useGetfile } from "../apis/userfile.api";
 
 const List = ({ data }: { data: UserFileType[] }) => {
   return (
@@ -40,6 +41,24 @@ const List = ({ data }: { data: UserFileType[] }) => {
 
 function UserHome() {
   const [data, setData] = useState<UserFileType[]>([]);
+  const [show, setShow] = useState<boolean>(false);
+  const [info, setInfo] = useState<string>("");
+  useEffect(() => {
+    const get = async () => {
+      try {
+        const data = await useGetfile();
+        setData(data);
+      } catch (error: any) {
+        setShow(true);
+        if (error.response && error.response.data) {
+          setInfo(error.response.data.message);
+          return;
+        }
+        setInfo(error.message);
+      }
+    };
+    get();
+  }, []);
   return (
     <div className="flex justify-center px-3">
       <div className="w-[50rem]">
