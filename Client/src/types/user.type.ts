@@ -1,5 +1,5 @@
 export interface UserFileType {
-  id: string;
+  _id: string;
   filename: string;
   pathurl: string;
   filepublicid: string;

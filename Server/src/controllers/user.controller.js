@@ -1,5 +1,5 @@
 import Userfile from "../models/Userfile.js";
-
+import User from "../models/User.js";
 async function Details(req, res) {
   try {
     const username = req.user;

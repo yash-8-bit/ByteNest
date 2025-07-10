@@ -1,6 +1,7 @@
+import ls from "../utils/ls.logic";
 import Call from "./setting";
 
-const token = "";
+const token = ls.get();
 const config = {
   headers: {
     Authorization: `Bearer ${token}`,

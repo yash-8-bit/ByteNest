@@ -1,6 +1,7 @@
+import ls from "../utils/ls.logic";
 import Call from "./setting";
 
-const token = "";
+const token = ls.get();
 const config = {
   headers: {
     Authorization: `Bearer ${token}`,
@@ -13,12 +14,12 @@ const useGetfile = async () => {
 };
 
 const useUploadfile = async (filedata: FormData) => {
-  let response = await Call.post("/userfile/upload-file", { filedata }, config);
+  let response = await Call.post("/userfile/upload-file", filedata, config);
   return response.data;
 };
 
-const useDeletefile = async (id: string) => {
-  let response = await Call.post("/userfile/delete-file", { id }, config);
+const useDeletefile = async (_id: string) => {
+  let response = await Call.delete(`/userfile/delete-file/${_id}` , config);
   return response.data;
 };
 

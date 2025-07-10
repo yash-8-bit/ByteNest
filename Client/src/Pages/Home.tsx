@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import bgimage from "../assets/bg.jpg";
 import logo from "../assets/biglogo.png";
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
+import ls from "../utils/ls.logic";
 function Home() {
   const navigate = useNavigate();
+  const run = (): void => {
+    if (ls.get()) navigate("/user-home");
+  };
+  useEffect(() => {
+    run();
+  }, []);
   return (
     <div
       className="h-screen bg-cover"

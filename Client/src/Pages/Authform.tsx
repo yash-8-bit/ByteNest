@@ -10,6 +10,7 @@ import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import Alert from "../components/Alert";
 import { useLogin, useRegister } from "../apis/userauth.api";
 import type { AlertType } from "../types/alert.type";
+import ls from "../utils/ls.logic";
 
 function Authform({ type }: { type: string }) {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ function Authform({ type }: { type: string }) {
         },
         cname: "alert-success",
       });
+      ls.set(data.token);
     } catch (error: any) {
       setShow(true);
       if (error.response && error.response.data) {
@@ -74,6 +76,7 @@ function Authform({ type }: { type: string }) {
         },
         cname: "alert-success",
       });
+      ls.set(data.token);
     } catch (error: any) {
       setShow(true);
       if (error.response && error.response.data) {

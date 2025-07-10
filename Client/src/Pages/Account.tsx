@@ -3,10 +3,11 @@ import { RiAccountBox2Fill } from "react-icons/ri";
 import { tc } from "../components/style/main";
 import Button from "../components/Button";
 import { BiLeftArrowAlt } from "react-icons/bi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useDelete, useDetails } from "../apis/user";
 import type { User } from "../types/user.type";
 import Alert from "../components/Alert";
+import ls from "../utils/ls.logic";
 
 function Account() {
   const [data, setData] = useState<User>({
@@ -18,6 +19,7 @@ function Account() {
   const Delete = async () => {
     try {
       const data = await useDelete();
+      ls.reset();
       alert(data.message);
     } catch (error: any) {
       setShow(true);
@@ -27,6 +29,10 @@ function Account() {
       }
       setInfo(error.message);
     }
+  };
+  const Logout = () => {
+    ls.reset();
+    useNavigate()("/home");
   };
   useEffect(() => {
     const get = async () => {
@@ -70,7 +76,11 @@ function Account() {
           <h3 id="email">{data.username}</h3>
         </div>
         <div className="flex justify-around">
-          <Button text="Log Out" cname={`dark:btn-soft btn-warning`} />
+          <Button
+            text="Log Out"
+            func={Logout}
+            cname={`dark:btn-soft btn-warning`}
+          />
           <Button
             text="Delete Account"
             func={Delete}

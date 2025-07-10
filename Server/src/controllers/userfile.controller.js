@@ -35,19 +35,22 @@ async function uploadfile(req, res) {
       req.user + "_x_" + path.extname(req.file.originalname);
     fs.unlinkSync(path.join(__dirname, "../../", "tmpfile", filenamelocal));
     console.error(error);
+    res.status(500).json({ message: "Try Again Later.." });
   }
 }
 
 async function deletefile(req, res) {
   try {
-    const { filepublicid, filetype, id } = req.body;
-    await Userfile.deleteOne({ _id: id });
-    await cloudinary.uploader.destroy(filepublicid, {
-      resource_type: filetype,
+    const _id = req.params._id;
+    const response = await Userfile.findOne({ _id: _id });
+    await cloudinary.uploader.destroy(response.filepublicid, {
+      resource_type: response.filetype,
     });
+    await Userfile.deleteOne({ _id: _id });
     res.status(202).json({ message: "File Deleted Successfully" });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Try Again Later.." });
   }
 }
 
@@ -57,6 +60,7 @@ async function getfiles(req, res) {
     res.status(200).json({ data: response });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Try Again Later.." });
   }
 }
 

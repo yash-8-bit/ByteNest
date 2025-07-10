@@ -13,17 +13,17 @@ function App() {
     <BrowserRouter>
       <Webapp>
         <Routes>
-          <Route element={<Navbar />}>
-            <Route path="/user-home" element={<UserHome />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/account" element={<Account />} />
-          </Route>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/account-login" element={<Authform type="login" />} />
           <Route
             path="/account-register"
             element={<Authform type="register" />}
           />
+          <Route element={<Navbar />}>
+            <Route path="/user-home" element={<UserHome />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/account" element={<Account />} />
+          </Route>
         </Routes>
       </Webapp>
     </BrowserRouter>

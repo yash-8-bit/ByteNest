@@ -11,7 +11,7 @@ Userfileroute.post(
   upload.single("__file__"),
   userfile.uploadfile
 );
-Userfileroute.post("/delete-file", verifytoken, userfile.deletefile);
+Userfileroute.delete("/delete-file/:_id", verifytoken, userfile.deletefile);
 Userfileroute.get("/get-files", verifytoken, userfile.getfiles);
 
 export default Userfileroute;
