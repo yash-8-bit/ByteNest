@@ -1,21 +1,21 @@
 import ls from "../utils/ls.logic";
 import Call from "./setting";
 
-const token = ls.get();
+const token = ls.ls1.get();
 const config = {
   headers: {
     Authorization: `Bearer ${token}`,
   },
 };
 
-const useDetails = async () => {
+const accountDetails = async () => {
   let response = await Call.get("/user/details", config);
   return response.data;
 };
 
-const useDelete = async () => {
+const accountDelete = async () => {
   let response = await Call.delete("/user/delete", config);
   return response.data;
 };
 
-export { useDetails, useDelete };
+export { accountDelete,accountDetails };

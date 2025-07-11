@@ -1,4 +1,4 @@
-import { useContext, useState, type FormEvent } from "react";
+import { useContext, useState, type FormEvent, type JSX } from "react";
 import Button from "../components/Button";
 import type { UserAuthType } from "../types/user.type";
 import Input from "../components/Input";
@@ -8,12 +8,14 @@ import { Link, useNavigate } from "react-router";
 import Iconbutton from "../components/Iconbutton";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import Alert from "../components/Alert";
-import { useLogin, useRegister } from "../apis/userauth.api";
+import { login, register } from "../apis/userauth.api";
 import type { AlertType } from "../types/alert.type";
 import ls from "../utils/ls.logic";
+import Loading from "../components/Loading";
 
-function Authform({ type }: { type: string }) {
+function Authform({ type }: { type: string }):JSX.Element {
   const navigate = useNavigate();
+  const [isloading, setIsloading] = useState<boolean>(false);
   const [formdata, setFormdata] = useState<UserAuthType>({
     name: "",
     username: "",
@@ -29,18 +31,20 @@ function Authform({ type }: { type: string }) {
   const handlelogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const data = await useLogin(formdata);
+      setIsloading(true);
+      const data = await login(formdata);
+      setIsloading(false);
+      ls.ls1.set(data.token);
       setShow(true);
       setInfoobj({
         text: data.message,
         action: () => {
-          navigate("/user-home");
-          setShow(false);
+          location.replace("/user-home");
         },
         cname: "alert-success",
       });
-      ls.set(data.token);
     } catch (error: any) {
+      setIsloading(false);
       setShow(true);
       if (error.response && error.response.data) {
         setInfoobj({
@@ -66,18 +70,20 @@ function Authform({ type }: { type: string }) {
   const handleregitser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const data = await useRegister(formdata);
+      setIsloading(true);
+      const data = await register(formdata);
+      setIsloading(false);
+      ls.ls1.set(data.token);
       setShow(true);
       setInfoobj({
         text: data.message,
         action: () => {
-          navigate("/user-home");
-          setShow(false);
+          location.replace("/user-home");
         },
         cname: "alert-success",
       });
-      ls.set(data.token);
     } catch (error: any) {
+      setIsloading(false);
       setShow(true);
       if (error.response && error.response.data) {
         setInfoobj({
@@ -102,8 +108,10 @@ function Authform({ type }: { type: string }) {
   };
   return (
     <div
-      className={`${context.Theme} transition-all flex-col flex ${commonbg} justify-center items-center h-screen`}
+      className={`${context.Theme}
+       transition-all p-3 flex-col flex ${commonbg} justify-center items-center h-screen`}
     >
+      {isloading && <Loading />}
       {show && (
         <Alert
           cname={infoobj.cname}

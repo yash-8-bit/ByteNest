@@ -1,4 +1,4 @@
-import React from "react";
+import { type JSX } from "react";
 import type { InputType } from "../types/input.type";
 import { commonbg, tc } from "./style/main";
 
@@ -9,7 +9,7 @@ function Input({
   placeholder = "",
   value,
   onchange,
-}: InputType) {
+}: InputType) :JSX.Element{
   return (
     <fieldset className="fieldset">
       <legend className={`fieldset-legend ${tc}`}>{heading}</legend>

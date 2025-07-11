@@ -18,7 +18,7 @@ async function register(req, res) {
     const token = jwt.sign({ username: username }, process.env.JWT_KEY, {
       expiresIn: "30d",
     });
-    res.status(201).json({ message: "Register Sucessfull", token: token });
+    res.status(201).json({ message: "Register Successfull", token: token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Try Again Later.." });
@@ -35,7 +35,7 @@ async function login(req, res) {
     const token = jwt.sign({ username: username }, process.env.JWT_KEY, {
       expiresIn: "30d",
     });
-    res.status(201).json({ message: "Login Sucessfull", token: token });
+    res.status(201).json({ message: "Login Successfull", token: token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Try Again Later.." });

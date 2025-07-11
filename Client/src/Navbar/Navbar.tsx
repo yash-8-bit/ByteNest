@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import  { useContext, useEffect, type JSX } from "react";
 import logo from "/favicon.ico";
 import Dropdown from "../components/Dropdown";
-import type { DropdownType } from "../types/Dropdown.types";
-import { Outlet } from "react-router";
+import type { DropdownType } from "../types/dropdown.types";
+import { Outlet, useNavigate } from "react-router";
 import { WebappContext } from "../Context/Webapp";
 import Iconbutton from "../components/Iconbutton";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import { commonbg, tc } from "../components/style/main";
+import ls from "../utils/ls.logic";
 
-function Navbar(): React.ReactNode {
+function Navbar(): JSX.Element {
+  const navigate = useNavigate();
   const data: DropdownType = {
     MainHeading: "options",
     DropdownArray: [
@@ -17,6 +19,12 @@ function Navbar(): React.ReactNode {
       { text: "account", link: "/account" },
     ],
   };
+  const run = (): void => {
+    if (!ls.ls1.get()) navigate("/");
+  };
+  useEffect(() => {
+    run();
+  }, []);
   const context = useContext(WebappContext);
   return (
     <div className={`${context.Theme} ${commonbg} h-screen transition-colors`}>

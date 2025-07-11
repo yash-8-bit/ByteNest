@@ -1,27 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { RiAccountBox2Fill } from "react-icons/ri";
 import { tc } from "../components/style/main";
 import Button from "../components/Button";
 import { BiLeftArrowAlt } from "react-icons/bi";
-import { Link, useNavigate } from "react-router";
-import { useDelete, useDetails } from "../apis/user";
+import { Link } from "react-router";
+import { accountDelete, accountDetails } from "../apis/user";
 import type { User } from "../types/user.type";
 import Alert from "../components/Alert";
 import ls from "../utils/ls.logic";
+import Loading from "../components/Loading";
 
-function Account() {
+function Account(): JSX.Element {
   const [data, setData] = useState<User>({
     name: "",
     username: "",
   });
+  const [isloading, setIsloading] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [info, setInfo] = useState<string>("");
-  const Delete = async () => {
+  const account_delete = async () => {
     try {
-      const data = await useDelete();
-      ls.reset();
+      setIsloading(true);
+      const data = await accountDelete();
+      ls.ls1.reset();
       alert(data.message);
+      setIsloading(false);
+      location.reload();
     } catch (error: any) {
+      setIsloading(false);
       setShow(true);
       if (error.response && error.response.data) {
         setInfo(error.response.data.message);
@@ -31,15 +37,18 @@ function Account() {
     }
   };
   const Logout = () => {
-    ls.reset();
-    useNavigate()("/home");
+    ls.ls1.reset();
+    location.reload();
   };
   useEffect(() => {
     const get = async () => {
       try {
-        const data = await useDetails();
+        setIsloading(true);
+        const data = await accountDetails();
         setData(data.data);
+        setIsloading(false);
       } catch (error: any) {
+        setIsloading(false);
         setShow(true);
         if (error.response && error.response.data) {
           setInfo(error.response.data.message);
@@ -52,6 +61,7 @@ function Account() {
   }, []);
   return (
     <div className="flex justify-center px-3">
+      {isloading && <Loading />}
       {show && (
         <Alert text={info} cname="alert-error" action={() => setShow(false)} />
       )}
@@ -83,7 +93,7 @@ function Account() {
           />
           <Button
             text="Delete Account"
-            func={Delete}
+            func={account_delete}
             cname={`dark:btn-soft btn-error`}
           />
         </div>

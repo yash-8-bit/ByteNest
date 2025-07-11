@@ -1,14 +1,21 @@
-import React, { useEffect } from "react";
+import { useEffect, type JSX } from "react";
 import bgimage from "../assets/bg.jpg";
 import logo from "../assets/biglogo.png";
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
 import ls from "../utils/ls.logic";
-function Home() {
+function Home():JSX.Element {
   const navigate = useNavigate();
   const run = (): void => {
-    if (ls.get()) navigate("/user-home");
+    if (ls.ls1.get()) navigate("/user-home");
   };
+  const fileUploaderDescription: string[] = [
+    "📤 Simple and fast file uploading interface for users!",
+    "🔒 Secure upload process ensuring your files are safe.",
+    "⚡ Supports multiple file formats for seamless transfers.",
+    "📁 Easily drag and drop or browse to upload files.",
+    "🚀 Effortless experience with real-time upload progress tracking.",
+  ];
   useEffect(() => {
     run();
   }, []);
@@ -19,7 +26,7 @@ function Home() {
     >
       <div className="h-full bg-black/90">
         <h1
-          className="p-4 text-black/60 font-bold text-4xl pl-4 
+          className="p-4 text-black/60 font-bold text-xl md:text-3xl lg:text-4xl pl-4 
     bg-gradient-to-r from-white/80 to-transparent"
         >
           Presenting Drop Fest
@@ -29,13 +36,23 @@ function Home() {
             <div className="grid place-items-center">
               <img src={logo} className="size-40 md:size-60" />
             </div>
-            <div className="flex justify-center md:items-start items-center flex-col gap-4">
-              <p className="text-white/70 text-xl sm:text-2xl font-bold max-w-96 text-justify">
-                Welcome to our simple and secure file upload service! Easily
-                upload, store, and share your files with just a few clicks. Your
-                data is safe with us — fast, reliable, and user-friendly. Start
-                uploading now!
+            <div
+              className="flex justify-center  md:items-start items-center flex-col gap-4
+            "
+            >
+              <p className="text-white/70 max-w-96 text-base sm:text-2xl font-bold  text-justify">
+                Welcome to our simple and secure file upload service!
               </p>
+              <ul className="text-base font-bold list-disc">
+                {fileUploaderDescription.map((item) => (
+                  <li
+                    className="underline underline-offset-8 hover:decoration-cyan-500"
+                    key={item}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
               <Button
                 func={() => navigate("/account-register")}
                 cname="w-fit font btn-soft btn-success"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 import type { IconBtnType } from "../types/button.type";
 
 function Iconbutton({
@@ -7,7 +7,7 @@ function Iconbutton({
   cname = "",
   icon1,
   icon2,
-}: IconBtnType) {
+}: IconBtnType):JSX.Element {
   const [istrue, setIstrue] = useState<boolean>(true);
   const handleClick = () => {
     func();

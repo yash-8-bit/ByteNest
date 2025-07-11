@@ -4,7 +4,6 @@ type buttontype = "button" | "submit";
 
 export interface ButtonType {
   text: string;
-  loading?: boolean;
   func?: () => void;
   type?: buttontype;
   cname?: string;

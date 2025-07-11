@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 import type { UserFileType } from "../types/user.type";
 import Iconbutton from "../components/Iconbutton";
 import { BiDownload } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { tc } from "../components/style/main";
 import Alert from "../components/Alert";
-import { useDeletefile, useGetfile } from "../apis/userfile.api";
+import { deleteFile, getFile } from "../apis/userfile.api";
 import type { AlertType } from "../types/alert.type";
-function UserHome() {
+import Loading from "../components/Loading";
+function UserHome():JSX.Element {
   const [data, setData] = useState<UserFileType[]>([]);
   const [show, setShow] = useState<boolean>(false);
+  const [isloading, setIsloading] = useState<boolean>(false);
   const [infoobj, setInfoobj] = useState<AlertType>({
     text: "",
     action: () => {
@@ -18,11 +20,14 @@ function UserHome() {
     cname: "",
   });
   useEffect(() => {
-    const get = async () => {
+    const get_file = async () => {
       try {
-        const data = await useGetfile();
+        setIsloading(true);
+        const data = await getFile();
+        setIsloading(false);
         setData(data.data);
       } catch (error: any) {
+        setIsloading(false);
         setShow(true);
         if (error.response && error.response.data) {
           setInfoobj({
@@ -39,18 +44,22 @@ function UserHome() {
         });
       }
     };
-    get();
+    get_file();
   }, []);
-  const deleteFile = async (_id: string) => {
+  const delete_file = async (_id: string) => {
     try {
-      const data_ = await useDeletefile(_id);
+      setIsloading(true);
+      const data_ = await deleteFile(_id);
+      setIsloading(false);
       setShow(true);
       setInfoobj({
         ...infoobj,
         text: data_.message,
         cname: "alert-success",
       });
+      setData(data.filter((item) => item._id != _id));
     } catch (error: any) {
+      setIsloading(false);
       setShow(true);
       if (error.response && error.response.data) {
         setInfoobj({
@@ -67,8 +76,12 @@ function UserHome() {
       });
     }
   };
+  const getDownloadUrl = (url: string) => {
+    return url.replace("/upload/", `/upload/fl_attachment/`);
+  };
   return (
     <>
+      {isloading && <Loading />}
       {show && (
         <Alert
           cname={infoobj.cname}
@@ -84,11 +97,11 @@ function UserHome() {
             </p>
           ) : (
             <div className="dark:shadow-teal-500 shadow-pink-600 shadow-2xl rounded-box ">
-              <ul className="list">
+              <ul className="list overflow-auto max-h-[86vh]">
                 <li className="p-4 text-xs dark:text-white text-black  text-center opacity-60 tracking-wide">
                   Files you uploded
                 </li>
-                {data.map((eachdata, i) => (
+                {[...data].map((eachdata, i) => (
                   <li className="list-row" key={i}>
                     <h4 className="text-4xl dark:text-white text-black font-thin dark:opacity-30 tabular-nums">
                       {i + 1}
@@ -101,14 +114,16 @@ function UserHome() {
                         {eachdata.filetype}
                       </p>
                     </div>
-                    <Iconbutton
-                      cname="btn-info btn-sm"
-                      icon1={<BiDownload />}
-                    />
+                    <a
+                      className="btn btn-info btn-sm"
+                      href={getDownloadUrl(eachdata.pathurl)}
+                    >
+                      <BiDownload />
+                    </a>
                     <Iconbutton
                       cname="bg-red-500 btn-sm border-0 hover:bg-red-400"
                       icon1={<MdDelete />}
-                      func={() => deleteFile(eachdata._id)}
+                      func={() => delete_file(eachdata._id)}
                     />
                   </li>
                 ))}

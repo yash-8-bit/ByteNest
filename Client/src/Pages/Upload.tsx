@@ -1,13 +1,14 @@
-import React, { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type JSX } from "react";
 import Dropzone from "react-dropzone";
 import { tc } from "../components/style/main";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { Link, useNavigate } from "react-router";
 import { BiLeftArrowAlt } from "react-icons/bi";
-import { useUploadfile } from "../apis/userfile.api";
+import { uploadFile } from "../apis/userfile.api";
 import type { AlertType } from "../types/alert.type";
 import Alert from "../components/Alert";
+import Loading from "../components/Loading";
 
 const FileDropZone = ({ setvalue }: any) => {
   const [fileName, setFileName] = useState<string>("");
@@ -37,10 +38,11 @@ const FileDropZone = ({ setvalue }: any) => {
   );
 };
 
-function Upload() {
+function Upload():JSX.Element {
   const navigate = useNavigate();
   const [filevalue, setFilevalue] = useState<File>();
   const [newFileName, setNewFileName] = useState<string>("");
+  const [isloading, setIsloading] = useState(false);
   const [infoobj, setInfoobj] = useState<AlertType>({
     text: "",
     action: () => {},
@@ -50,12 +52,14 @@ function Upload() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      setShow(true);
       if (!filevalue) return;
       const fd = new FormData();
       fd.append("__file__", filevalue);
       fd.append("filename", newFileName);
-      const data = await useUploadfile(fd);
+      setIsloading(true);
+      const data = await uploadFile(fd);
+      setIsloading(false);
+      setShow(true);
       setInfoobj({
         text: data.message,
         action: () => {
@@ -65,6 +69,7 @@ function Upload() {
         cname: "alert-success",
       });
     } catch (error: any) {
+      setIsloading(false);
       setShow(true);
       if (error.response && error.response.data) {
         setInfoobj({
@@ -89,6 +94,9 @@ function Upload() {
   };
   return (
     <>
+      {isloading && (
+       <Loading />
+      )}
       {show && (
         <Alert
           cname={infoobj.cname}

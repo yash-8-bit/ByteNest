@@ -1,7 +1,7 @@
 class Localstorage {
   private key: string;
-  constructor() {
-    this.key = "authtoken";
+  constructor(key: string) {
+    this.key = key;
   }
   set(value: string): void {
     localStorage.setItem(this.key, value);
@@ -15,5 +15,6 @@ class Localstorage {
   }
 }
 
-const ls = new Localstorage();
-export default ls;
+const ls1 = new Localstorage("authtoken");
+const ls2 = new Localstorage("local_theme");
+export default { ls1, ls2 };

@@ -1,4 +1,4 @@
-import cloudinary from "../config/cloudinaryconfig.js";
+import cloudinary from "../config/cloudinary.config.js";
 import Userfile from "../models/Userfile.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -28,7 +28,6 @@ async function uploadfile(req, res) {
       filetype: result.resource_type,
     });
     await userfile.save();
-    console.info(result);
     res.status(201).json({ message: "File Uploaded Successfully" });
   } catch (error) {
     const filenamelocal =
@@ -49,7 +48,7 @@ async function deletefile(req, res) {
     await Userfile.deleteOne({ _id: _id });
     res.status(202).json({ message: "File Deleted Successfully" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ message: "Try Again Later.." });
   }
 }
@@ -59,7 +58,7 @@ async function getfiles(req, res) {
     const response = await Userfile.find({ username: req.user });
     res.status(200).json({ data: response });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ message: "Try Again Later.." });
   }
 }

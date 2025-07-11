@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const Fileschema = mongoose.Schema({
-  filename: { type: String, required: true, unique: true },
+  filename: { type: String, required: true },
   username: { type: String, required: true },
   pathurl: { type: String, required: true },
   filepublicid: { type: String, required: true },

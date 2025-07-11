@@ -1,6 +1,4 @@
-export type Theme = "light" | "dark";
-
 export interface WebappType {
-  Theme: Theme;
+  Theme: string;
   ChangeTheme: () => void;
 }

@@ -1,12 +1,12 @@
 import type { UserAuthType } from "../types/user.type";
 import Call from "./setting";
 
-const useLogin = async ({ username, password }: UserAuthType) => {
+const login = async ({ username, password }: UserAuthType) => {
   let response = await Call.post("/userauth/login", { username, password });
   return response.data;
 };
 
-const useRegister = async ({ name, username, password }: UserAuthType) => {
+const register = async ({ name, username, password }: UserAuthType) => {
   let response = await Call.post("/userauth/register", {
     name,
     username,
@@ -15,4 +15,4 @@ const useRegister = async ({ name, username, password }: UserAuthType) => {
   return response.data;
 };
 
-export { useLogin, useRegister };
+export { login,register };
