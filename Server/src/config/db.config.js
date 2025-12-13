@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DBURI);
+    await mongoose.connect(process.env.DBURI,{
+      dbName : "byte-nest-db"
+    });
     console.info("MongoDB connected successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);

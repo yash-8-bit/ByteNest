@@ -1,4 +1,4 @@
 export interface WebappType {
-  Theme: string;
+  Theme: "light" | "dark";
   ChangeTheme: () => void;
 }

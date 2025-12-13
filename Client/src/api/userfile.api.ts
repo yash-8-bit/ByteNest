@@ -1,5 +1,5 @@
-import ls from "../utils/ls.logic";
-import Call from "./setting";
+import ls from "../utils/ls.util";
+import Api from "./config/axios";
 
 const token = ls.ls1.get();
 const config = {
@@ -9,17 +9,17 @@ const config = {
 };
 
 const getFile = async () => {
-  let response = await Call.get("/userfile/get-files", config);
+  let response = await Api.get("/userfile/get-files", config);
   return response.data;
 };
 
 const uploadFile = async (filedata: FormData) => {
-  let response = await Call.post("/userfile/upload-file", filedata, config);
+  let response = await Api.post("/userfile/upload-file", filedata, config);
   return response.data;
 };
 
 const deleteFile = async (_id: string) => {
-  let response = await Call.delete(`/userfile/delete-file/${_id}`, config);
+  let response = await Api.delete(`/userfile/delete-file/${_id}`, config);
   return response.data;
 };
 

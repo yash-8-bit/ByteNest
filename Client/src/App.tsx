@@ -2,30 +2,35 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Navbar from "./Navbar/Navbar";
 import Home from "./Pages/Home";
 import Upload from "./Pages/Upload";
-import Account from "./Pages/Account";
 import { Webapp } from "./Context/Webapp";
-import Authform from "./Pages/Authform";
+import Authform from "./Pages/auth/Authform";
 import UserHome from "./Pages/UserHome";
+import MyToast from "./components/MyToast";
+import Mythemeprovider from "./Provider/Mythemeprovider";
+import UserPage from "./Pages/User";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Webapp>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/account-login" element={<Authform type="login" />} />
-          <Route
-            path="/account-register"
-            element={<Authform type="register" />}
-          />
-          <Route element={<Navbar />}>
-            <Route path="/user-home" element={<UserHome />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/account" element={<Account />} />
-          </Route>
-        </Routes>
-      </Webapp>
-    </BrowserRouter>
+    <Webapp>
+      <MyToast />
+      <Mythemeprovider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth/login" element={<Authform type="login" />} />
+            <Route
+              path="/auth/register"
+              element={<Authform type="register" />}
+            />
+            <Route element={<Navbar />}>
+              <Route path="/home" element={<UserHome />} />
+              <Route path="/upload-file" element={<Upload />} />
+              <Route path="/user" element={<UserPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Mythemeprovider>
+    </Webapp>
   );
 }
 

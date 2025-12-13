@@ -1,80 +1,45 @@
-import React, { useEffect, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import type { UserFileType } from "../types/user.type";
-import Iconbutton from "../components/Iconbutton";
 import { BiDownload } from "react-icons/bi";
-import { MdDelete } from "react-icons/md";
 import { tc } from "../components/style/main";
-import Alert from "../components/Alert";
-import { deleteFile, getFile } from "../apis/userfile.api";
-import type { AlertType } from "../types/alert.type";
-import Loading from "../components/Loading";
-function UserHome():JSX.Element {
-  const [data, setData] = useState<UserFileType[]>([]);
-  const [show, setShow] = useState<boolean>(false);
+import { deleteFile, getFile } from "../api/userfile.api";
+import Loading from "../components/MyLoading";
+import { ApiFunction } from "../utils/apifunction.util";
+import IconButton from "@mui/material/IconButton";
+import { Link } from "react-router";
+import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
+function UserHome(): JSX.Element {
+  const [data, setData] = useState<UserFileType[]>([{
+    _id: "2323",
+    filename: "sdd",
+    pathurl: "sdsd",
+    filepublicid: "sdsd",
+    filetype: "sdsd",
+  }]);
   const [isloading, setIsloading] = useState<boolean>(false);
-  const [infoobj, setInfoobj] = useState<AlertType>({
-    text: "",
-    action: () => {
-      setShow(false);
-    },
-    cname: "",
-  });
+
   useEffect(() => {
-    const get_file = async () => {
-      try {
-        setIsloading(true);
-        const data = await getFile();
-        setIsloading(false);
-        setData(data.data);
-      } catch (error: any) {
-        setIsloading(false);
-        setShow(true);
-        if (error.response && error.response.data) {
-          setInfoobj({
-            ...infoobj,
-            text: error.response.data.message,
-            cname: "alert-error",
-          });
-          return;
-        }
-        setInfoobj({
-          ...infoobj,
-          text: error.message,
-          cname: "alert-error",
-        });
-      }
+    const getFiles = async () => {
+      await ApiFunction({
+        callback: async () => {
+          const data = await getFile();
+          setData(data.data);
+        },
+        setLoading: setIsloading
+      })
+
     };
-    get_file();
+    getFiles();
   }, []);
-  const delete_file = async (_id: string) => {
-    try {
-      setIsloading(true);
-      const data_ = await deleteFile(_id);
-      setIsloading(false);
-      setShow(true);
-      setInfoobj({
-        ...infoobj,
-        text: data_.message,
-        cname: "alert-success",
-      });
-      setData(data.filter((item) => item._id != _id));
-    } catch (error: any) {
-      setIsloading(false);
-      setShow(true);
-      if (error.response && error.response.data) {
-        setInfoobj({
-          ...infoobj,
-          text: error.response.data.message,
-          cname: "alert-error",
-        });
-        return;
-      }
-      setInfoobj({
-        ...infoobj,
-        text: error.message,
-        cname: "alert-error",
-      });
-    }
+  const handleDelete = async (_id: string) => {
+    await ApiFunction({
+      callback: async () => {
+        await deleteFile(_id);
+        setData(data.filter((item) => item._id != _id));
+      },
+      setLoading: setIsloading
+    })
   };
   const getDownloadUrl = (url: string) => {
     return url.replace("/upload/", `/upload/fl_attachment/`);
@@ -82,49 +47,49 @@ function UserHome():JSX.Element {
   return (
     <>
       {isloading && <Loading />}
-      {show && (
-        <Alert
-          cname={infoobj.cname}
-          text={infoobj.text}
-          action={infoobj.action}
-        />
-      )}
-      <div className="flex justify-center px-3">
+
+      <div className="flex justify-center px-3 min-h-[80vh]">
         <div className="w-[50rem]">
           {data.length == 0 ? (
-            <p className={`${tc} font-bold text-3xl text-center `}>
-              No File uploded yet
-            </p>
+            <div className="grid h-full place-items-center">
+              <span className="flex flex-col items-center">
+                <p className={`${tc}  font font-bold text-2xl  `}>
+                  No File Uploaded Yet
+                </p>
+                <Link className="badge" to="/upload">
+                  upload your first file
+                </Link>
+              </span>
+            </div>
           ) : (
-            <div className="dark:shadow-teal-500 shadow-pink-600 shadow-2xl rounded-box ">
+            <div className="dark:shadow-teal-500 shadow-pink-600 shadow-2xl rounded-box mt-2 ">
               <ul className="list overflow-auto max-h-[86vh]">
                 <li className="p-4 text-xs dark:text-white text-black  text-center opacity-60 tracking-wide">
                   Files you uploded
                 </li>
-                {[...data].map((eachdata, i) => (
-                  <li className="list-row" key={i}>
+                {[...data, ...data].map((item, i) => (
+                  <li className="list-row font" key={i}>
                     <h4 className="text-4xl dark:text-white text-black font-thin dark:opacity-30 tabular-nums">
                       {i + 1}
                     </h4>
                     <div className="list-col-grow">
-                      <h3 className="dark:text-white  font text-black">
-                        {eachdata.filename}
-                      </h3>
-                      <p className="text-xs dark:text-white text-black uppercase font-semibold opacity-60">
-                        {eachdata.filetype}
+                      <h1 className="dark:text-white text-xl text-black">
+                        {item.filename}
+                      </h1>
+                      <p className="text-xs dark:text-white text-black/30 uppercase font-semibold">
+                        {item.filetype}
                       </p>
                     </div>
-                    <a
-                      className="btn btn-info btn-sm"
-                      href={getDownloadUrl(eachdata.pathurl)}
-                    >
-                      <BiDownload />
-                    </a>
-                    <Iconbutton
-                      cname="bg-red-500 btn-sm border-0 hover:bg-red-400"
-                      icon1={<MdDelete />}
-                      func={() => delete_file(eachdata._id)}
-                    />
+                    <IconButton>
+                      <a
+                        href={getDownloadUrl(item.pathurl)}
+                      >
+                        <DownloadIcon />
+                      </a>
+                    </IconButton>
+                    <IconButton color="error" onClick={() => handleDelete(item._id)}>
+                      <DeleteIcon />
+                    </IconButton>
                   </li>
                 ))}
               </ul>

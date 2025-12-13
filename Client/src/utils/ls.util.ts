@@ -8,7 +8,7 @@ class Localstorage {
   }
   get(): string | null {
     const value = localStorage.getItem(this.key);
-    return value;
+    return value || "";
   }
   reset(): void {
     localStorage.removeItem(this.key);

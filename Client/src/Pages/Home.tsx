@@ -1,65 +1,74 @@
 import { useEffect, type JSX } from "react";
-import bgimage from "../assets/bg.jpg";
-import logo from "../assets/biglogo.png";
-import Button from "../components/Button";
-import { useNavigate } from "react-router";
-import ls from "../utils/ls.logic";
-function Home():JSX.Element {
+import logo from "../assets/logo-home.webp";
+import { Link, useNavigate } from "react-router";
+import ls from "../utils/ls.util";
+import bghome from "../assets/bg-home.webp"
+function Home(): JSX.Element {
   const navigate = useNavigate();
   const run = (): void => {
     if (ls.ls1.get()) navigate("/user-home");
   };
-  const fileUploaderDescription: string[] = [
-    "📤 Simple and fast file uploading interface for users!",
-    "🔒 Secure upload process ensuring your files are safe.",
-    "⚡ Supports multiple file formats for seamless transfers.",
-    "📁 Easily drag and drop or browse to upload files.",
-    "🚀 Effortless experience with real-time upload progress tracking.",
+  const fileUploaderDescription: { icon: string, text: string }[] = [{
+    icon: "📤",
+    text: "Simple and fast file uploading interface for users!"
+  }, {
+    icon: "🔒",
+    text: "Secure upload process ensuring your files are safe."
+  },
+  {
+    icon: "🌐",
+    text: "Easily share files using secure, one-click shareable links."
+  },
+  {
+    icon: "⚡",
+    text: "Supports multiple file formats for seamless transfers."
+  },
+  {
+    icon: "📁", text: "Easily drag and drop or browse to upload files."
+  },
+  { icon: "🚀", text: "Effortless experience with real-time upload progress tracking" }
   ];
   useEffect(() => {
     run();
   }, []);
   return (
-    <div
-      className="h-screen bg-cover"
-      style={{ backgroundImage: `url(${bgimage})` }}
+
+    <div className=" h-screen bg-cover font"
+      style={{ backgroundImage: `url(${bghome})` }}
     >
-      <div className="h-full bg-black/90">
+      <div>
         <h1
-          className="p-4 text-black/60 font-bold text-xl md:text-3xl lg:text-4xl pl-4 
-    bg-gradient-to-r from-white/80 to-transparent"
+          className="p-4 text-black/60 pt-12 font-bold text-xl md:text-3xl lg:text-4xl text-center"
         >
           Presenting Drop Fest
         </h1>
-        <div className="flex items-center px-3 h-[86vh]">
-          <div className="w-full grid grid-cols-1 space-y-2 md:grid-cols-2">
-            <div className="grid place-items-center">
-              <img src={logo} className="size-40 md:size-60" />
-            </div>
-            <div
-              className="flex justify-center  md:items-start items-center flex-col gap-4
+      </div>
+      <div className=" flex-1 px-3">
+        <div className="grid place-items-center">
+          <img src={logo} className="size-40 md:size-60  " />
+        </div>
+        <div
+          className="flex justify-center text-gray-800  items-center flex-col gap-4
             "
-            >
-              <p className="text-white/70 max-w-96 text-base sm:text-2xl font-bold  text-justify">
-                Welcome to our simple and secure file upload service!
-              </p>
-              <ul className="text-base font-bold list-disc">
-                {fileUploaderDescription.map((item) => (
-                  <li
-                    className="underline underline-offset-8 hover:decoration-cyan-500"
-                    key={item}
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                func={() => navigate("/account-register")}
-                cname="w-fit font btn-soft btn-success"
-                text="Get Started"
-              />
-            </div>
-          </div>
+        >
+          <p className=" text-base sm:text-2xl font-bold  text-justify">
+            Welcome to our simple and secure file upload service!
+          </p>
+          <ul className="text-base font-bold ">
+            {fileUploaderDescription.map((item) => (
+              <li
+                className="flex gap-2 items-center"
+                key={item.text}
+              >
+                <p className="text-xl md:text-3xl animate-pulse">{item.icon}</p>
+                <p >{item.text}</p>
+              </li>
+            ))}
+          </ul>
+          <Link
+            to={"/auth/register"}
+            className="w-fit btn  btn-soft btn-info"
+          >Get Started</Link>
         </div>
       </div>
     </div>

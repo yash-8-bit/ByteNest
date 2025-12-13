@@ -1,14 +1,13 @@
 import { useState, type FormEvent, type JSX } from "react";
 import Dropzone from "react-dropzone";
 import { tc } from "../components/style/main";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import { Link, useNavigate } from "react-router";
-import { BiLeftArrowAlt } from "react-icons/bi";
-import { uploadFile } from "../apis/userfile.api";
-import type { AlertType } from "../types/alert.type";
-import Alert from "../components/Alert";
-import Loading from "../components/Loading";
+import {  useNavigate } from "react-router";
+import { uploadFile } from "../api/userfile.api";
+import Loading from "../components/MyLoading";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { ApiFunction } from "../utils/apifunction.util";
+import toast from "react-hot-toast";
 
 const FileDropZone = ({ setvalue }: any) => {
   const [fileName, setFileName] = useState<string>("");
@@ -21,14 +20,14 @@ const FileDropZone = ({ setvalue }: any) => {
     >
       {({ getRootProps, getInputProps }) => (
         <section
-          className="border-2 border-dashed w-fit rounded-xl
-         border-[#00d390] hover:border-solid hover:border-4 transition-all"
+          className="border  w-full rounded
+         border-gray-300 hover:border-gray-500 transition-all"
         >
           <div className="p-8 cursor-pointer py-15" {...getRootProps()}>
             <input required {...getInputProps()} />
-            <p className={`${tc} text-center text-xl font-bold opacity-40`}>
+            <p className={`${tc} font text-center text-xl font-medium opacity-40`}>
               {fileName == ""
-                ? "Drag & drop some files here, or click to select files"
+                ? "Drag & drop file here, or click to select file"
                 : `FileName :  ${fileName}`}
             </p>
           </div>
@@ -38,96 +37,47 @@ const FileDropZone = ({ setvalue }: any) => {
   );
 };
 
-function Upload():JSX.Element {
+function Upload(): JSX.Element {
   const navigate = useNavigate();
   const [filevalue, setFilevalue] = useState<File>();
   const [newFileName, setNewFileName] = useState<string>("");
   const [isloading, setIsloading] = useState(false);
-  const [infoobj, setInfoobj] = useState<AlertType>({
-    text: "",
-    action: () => {},
-    cname: "",
-  });
-  const [show, setShow] = useState<boolean>(false);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault();
-      if (!filevalue) return;
-      const fd = new FormData();
-      fd.append("__file__", filevalue);
-      fd.append("filename", newFileName);
-      setIsloading(true);
-      const data = await uploadFile(fd);
-      setIsloading(false);
-      setShow(true);
-      setInfoobj({
-        text: data.message,
-        action: () => {
-          navigate("/user-home");
-          setShow(false);
-        },
-        cname: "alert-success",
-      });
-    } catch (error: any) {
-      setIsloading(false);
-      setShow(true);
-      if (error.response && error.response.data) {
-        setInfoobj({
-          text: error.response.data.message,
-          action: () => {
-            navigate("/upload");
-            setShow(false);
-          },
-          cname: "alert-error",
-        });
-        return;
-      }
-      setInfoobj({
-        text: error.message,
-        action: () => {
-          navigate("/upload");
-          setShow(false);
-        },
-        cname: "alert-error",
-      });
-    }
+    await ApiFunction({
+      callback: async () => {
+        e.preventDefault();
+        if (!filevalue) {
+          toast.error("Select file please")
+          return;
+        }
+        const fd = new FormData();
+        fd.append("__file__", filevalue);
+        fd.append("filename", newFileName);
+        await uploadFile(fd);
+        toast.success("File upload success")
+        navigate("/home")
+      },
+      setLoading: setIsloading
+    })
   };
   return (
     <>
       {isloading && (
-       <Loading />
+        <Loading />
       )}
-      {show && (
-        <Alert
-          cname={infoobj.cname}
-          text={infoobj.text}
-          action={infoobj.action}
-        />
-      )}
-      <div className="flex justify-center items-center ">
-        <div className="px-4 mt-32">
-          <Link
-            className={`${tc} p-2 rounded bg-black/30 w-fit flex gap-2 place-items-center`}
-            to={"/user-home"}
-          >
-            <BiLeftArrowAlt />
-          </Link>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <Input
+      <div className="flex justify-center items-center h-[80vh]">
+        <div className="p-4 border rounded dark:border-gray-100/30 border-gray-200 shadow-xl">
+          <form onSubmit={handleSubmit} className="flex  flex-col gap-3">
+            <p className={`${tc} font text-center font-semibold`}>File - Form</p>
+            <TextField
               value={newFileName}
-              cname="input-success w-full"
-              heading="Enter Filename you want:"
-              placeholder="Filename"
-              onchange={(e) => setNewFileName(e.target.value)}
+              label="Enter Filename"
+              onChange={(e) => setNewFileName(e.target.value)}
+              required
             />
             <FileDropZone setvalue={setFilevalue} />
-            <div className="grid place-items-center">
-              <Button
-                text="Submit"
-                cname={`btn-wide btn-success`}
-                type="submit"
-              />
-            </div>
+            <Button variant="contained" type="submit" >Submit</Button>
           </form>
         </div>
       </div>

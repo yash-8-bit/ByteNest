@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import type { WebappType } from "../types/context.type";
-import ls from "../utils/ls.logic";
+import ls from "../utils/ls.util";
 
 const WebappContext = createContext<WebappType>({
   Theme: "light",
@@ -8,7 +8,7 @@ const WebappContext = createContext<WebappType>({
 });
 
 function Webapp({ children }: { children: React.ReactNode }) {
-  const [Theme, setTheme] = useState<string>("");
+  const [Theme, setTheme] = useState<"light" | "dark">("light");
   const ChangeTheme = () => {
     setTheme((t) => {
       ls.ls2.set(t == "light" ? "dark" : "light");
@@ -17,7 +17,7 @@ function Webapp({ children }: { children: React.ReactNode }) {
   };
   const run = (): void => {
     if (!ls.ls2.get()) ls.ls2.set("light");
-    setTheme(ls.ls2.get()!);
+    setTheme(ls.ls2.get()! as "light" | "dark");
   };
   useEffect(() => {
     run();

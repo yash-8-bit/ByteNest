@@ -1,24 +1,17 @@
-import  { useContext, useEffect, type JSX } from "react";
-import logo from "/favicon.ico";
-import Dropdown from "../components/Dropdown";
-import type { DropdownType } from "../types/dropdown.types";
-import { Outlet, useNavigate } from "react-router";
+import { useContext, useEffect, type JSX } from "react";
+import { Link, Outlet, useNavigate } from "react-router";
 import { WebappContext } from "../Context/Webapp";
-import Iconbutton from "../components/Iconbutton";
-import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import { commonbg, tc } from "../components/style/main";
-import ls from "../utils/ls.logic";
-
+import ls from "../utils/ls.util";
+import MySwitch from "../components/style/theme/MySwitch";
+import SortIcon from '@mui/icons-material/Sort';
 function Navbar(): JSX.Element {
   const navigate = useNavigate();
-  const data: DropdownType = {
-    MainHeading: "options",
-    DropdownArray: [
-      { text: "home", link: "/user-home" },
-      { text: "upload", link: "/upload" },
-      { text: "account", link: "/account" },
-    ],
-  };
+  const data = [
+    { text: "Home", href: "/home" },
+    { text: "Upload File", href: "/upload-file" },
+    { text: "User", href: "/user" },
+  ];
   const run = (): void => {
     if (!ls.ls1.get()) navigate("/");
   };
@@ -28,27 +21,33 @@ function Navbar(): JSX.Element {
   const context = useContext(WebappContext);
   return (
     <div className={`${context.Theme} ${commonbg} h-screen transition-colors`}>
-      <nav className="mx-2 py-2 flex items-center justify-between sm:justify-around">
-        <img className="w-8 md:w-10 h-auto" src={logo} alt="" />
-        <span className="flex flex-col gap-1 justify-center items-center">
-          <h1 className="dark:text-cyan-500 text-red-500 text-xl sm:text-2xl md:text-3xl font-bold">
-            Drop Fest
-          </h1>
-          <p className={`hidden ${tc} font  sm:flex`}>
-            Save your files safely in cloud
-          </p>
-        </span>
-        <div className="flex justify-center items-center">
-          <Dropdown data={data} />
-          <Iconbutton
-            cname="btn-primary dark:btn-error"
-            func={context.ChangeTheme}
-            icon1={<MdOutlineLightMode />}
-            isnormal={false}
-            icon2={<MdOutlineDarkMode />}
-          />
+      <div className="navbar dark:bg-base-300  shadow-sm">
+        <div className="navbar-start">
+          <div className="dropdown">
+            <div tabIndex={0} role="button">
+              <SortIcon className={`${tc}`} />
+            </div>
+            <ul
+              tabIndex={-1}
+              className="menu menu-sm dropdown-content bg-gray-200 dark:bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+              {data.map((item) => (
+                <li>
+                  <Link className={`${tc} hover:text-red-500 text-base font-serif`} to={item.href}>
+                    {item.text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </nav>
+        <div className="navbar-center">
+          <h1 className={`${tc} font font-medium text-xl`}>Drop Fest</h1>
+        </div>
+        <div className="navbar-end">
+         
+          <MySwitch change={context.ChangeTheme} />
+        </div>
+      </div>
       <Outlet />
     </div>
   );
