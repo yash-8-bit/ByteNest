@@ -14,5 +14,8 @@ Userfileroute.post(
 );
 Userfileroute.delete("/:_id", verifytoken, userfile.DELETE);
 Userfileroute.get("/", verifytoken, userfile.GET);
+Userfileroute.put("/:_id", verifytoken, userfile.PUT);
+Userfileroute.get("/one", userfile.getOneByToken);
+
 
 export default Userfileroute;

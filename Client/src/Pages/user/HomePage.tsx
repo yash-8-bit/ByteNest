@@ -1,15 +1,17 @@
 import { useEffect, useState, type JSX } from "react";
-import type { UserFileType } from "../types/user.type";
-import { tc } from "../components/style/main";
-import { deleteFile, getFile } from "../api/userfile.api";
-import Loading from "../components/MyLoading";
-import { ApiFunction } from "../utils/apifunction.util";
+import type { UserFileType } from "../../types/user.type";
+import { tc } from "../../components/style/main";
+import { deleteFile, getFile, shareFile } from "../../api/userfile.api";
+import Loading from "../../components/MyLoading";
+import { ApiFunction } from "../../utils/apifunction.util";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router";
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
+import ShareIcon from '@mui/icons-material/Share';
 import toast from "react-hot-toast";
-function UserHome(): JSX.Element {
+import Tooltip from "@mui/material/Tooltip";
+function HomePage(): JSX.Element {
   const [data, setData] = useState<UserFileType[]>([]);
   const [isloading, setIsloading] = useState<boolean>(false);
 
@@ -26,6 +28,16 @@ function UserHome(): JSX.Element {
     };
     getFiles();
   }, []);
+  const handleShare = async (_id: string) => {
+    await ApiFunction({
+      callback: async () => {
+        const data = await shareFile(_id);
+        navigator.clipboard.writeText(`${import.meta.env.VITE_CLIENT_URL}/share-file?token=${data.data}`)
+        toast.success("Link Copied")
+      },
+      setLoading: setIsloading
+    })
+  }
   const handleDelete = async (_id: string) => {
     await ApiFunction({
       callback: async () => {
@@ -69,18 +81,25 @@ function UserHome(): JSX.Element {
                     </h4>
                     <div className="list-col-grow">
                       <h1 className="dark:text-white text-xl text-black">
-                        {item.filename}
+                        {item.name}
                       </h1>
                       <p className="text-xs dark:text-white text-black/30 uppercase font-semibold">
                         {item.filetype}
                       </p>
                     </div>
+
+
                     <IconButton>
                       <a
-                        href={getDownloadUrl(item.pathurl)}
+                        href={getDownloadUrl(item.url)}
                       >
                         <DownloadIcon />
                       </a>
+                    </IconButton>
+                    <IconButton>
+                      <Tooltip onClick={() => handleShare(item._id)} title="share file">
+                        <ShareIcon />
+                      </Tooltip>
                     </IconButton>
                     <IconButton color="error" onClick={() => handleDelete(item._id)}>
                       <DeleteIcon />
@@ -96,4 +115,4 @@ function UserHome(): JSX.Element {
   );
 }
 
-export default UserHome;
+export default HomePage;

@@ -9,6 +9,7 @@ A full-stack web application for securely uploading, downloading, and managing f
 * 📥 Download Files
 * ❌ Delete Files
 * 🌐 Responsive UI with DaisyUI & Tailwind CSS & Material UI
+* 🔒 Protected File Sharing – Securely share files
 
 ---
 
@@ -18,7 +19,8 @@ A full-stack web application for securely uploading, downloading, and managing f
 
 * **React with ts**
 * **Tailwind CSS**
-* **DaisyUI** (UI components built on Tailwind)
+* **DaisyUI** 
+* **MaterialUI** 
 
 ### Backend:
 
@@ -102,7 +104,7 @@ Ensure the following environment variables are set in your backend `.env` file:
 | Variable                | Description                                      |
 | ----------------------- | ------------------------------------------------ |
 | `VITE_API_URL`          | API URL used in the frontend (for Vite proxying) |
-
+| `VITE_CLIENT_URL`       | Frontend URL used in share link                  |
 ---
 
 ## 📄 License

@@ -6,7 +6,7 @@ import bghome from "../assets/bg-home.webp"
 function Home(): JSX.Element {
   const navigate = useNavigate();
   const run = (): void => {
-    if (ls.ls1.get()) navigate("/user-home");
+    if (ls.ls1.get()) navigate("/home");
   };
   const fileUploaderDescription: { icon: string, text: string }[] = [{
     icon: "📤",

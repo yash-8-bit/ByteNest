@@ -1,13 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import Navbar from "./Navbar/Navbar";
 import Home from "./Pages/Home";
-import Upload from "./Pages/Upload";
+import Upload from "./Pages/user/file/UploadPage";
 import { Webapp } from "./Context/Webapp";
 import Authform from "./Pages/auth/Authform";
-import UserHome from "./Pages/UserHome";
+import UserHome from "./Pages/user/HomePage";
 import MyToast from "./components/MyToast";
 import Mythemeprovider from "./Provider/Mythemeprovider";
-import UserPage from "./Pages/User";
+import UserPage from "./Pages/user/UserPage";
+import OneFile from "./Pages/user/file/OneFile";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/upload-file" element={<Upload />} />
               <Route path="/user" element={<UserPage />} />
             </Route>
+              <Route path="/share-file" element={<OneFile />} />
           </Routes>
         </BrowserRouter>
       </Mythemeprovider>

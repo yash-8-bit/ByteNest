@@ -1,12 +1,12 @@
 import { useState, type FormEvent, type JSX } from "react";
 import Dropzone from "react-dropzone";
-import { tc } from "../components/style/main";
+import { tc } from "../../../components/style/main";
 import {  useNavigate } from "react-router";
-import { uploadFile } from "../api/userfile.api";
-import Loading from "../components/MyLoading";
+import { uploadFile } from "../../../api/userfile.api";
+import Loading from "../../../components/MyLoading";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { ApiFunction } from "../utils/apifunction.util";
+import { ApiFunction } from "../../../utils/apifunction.util";
 import toast from "react-hot-toast";
 
 const FileDropZone = ({ setvalue }: any) => {
@@ -37,7 +37,7 @@ const FileDropZone = ({ setvalue }: any) => {
   );
 };
 
-function Upload(): JSX.Element {
+function UploadPage(): JSX.Element {
   const navigate = useNavigate();
   const [filevalue, setFilevalue] = useState<File>();
   const [newFileName, setNewFileName] = useState<string>("");
@@ -85,4 +85,4 @@ function Upload(): JSX.Element {
   );
 }
 
-export default Upload;
+export default UploadPage;

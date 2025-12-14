@@ -10,9 +10,20 @@ const uploadFile = async (filedata: FormData) => {
   return response.data;
 };
 
+const shareFile = async (_id: string) => {
+  let response = await Api.put(`/userfile/${_id}`);
+  return response.data;
+}
+
+
+const getOneFile = async (token: string) => {
+  let response = await Api.get(`/userfile/one?token=${token}`);
+  return response.data;
+};
+
 const deleteFile = async (_id: string) => {
   let response = await Api.delete(`/userfile/${_id}`);
   return response.data;
 };
 
-export { getFile, uploadFile, deleteFile };
+export { getFile, getOneFile, uploadFile, deleteFile, shareFile };

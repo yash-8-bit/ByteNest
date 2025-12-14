@@ -31,7 +31,7 @@ function Navbar(): JSX.Element {
               tabIndex={-1}
               className="menu menu-sm dropdown-content bg-gray-200 dark:bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
               {data.map((item) => (
-                <li>
+                <li key={item.text}>
                   <Link className={`${tc} hover:text-red-500 text-base font-serif`} to={item.href}>
                     {item.text}
                   </Link>

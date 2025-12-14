@@ -1,9 +1,9 @@
 export interface UserFileType {
   _id: string;
-  filename: string;
-  pathurl: string;
-  filepublicid: string;
+  name: string;
+  url: string;
   filetype: string;
+  username?: string;
 }
 
 export interface UserAuthType {

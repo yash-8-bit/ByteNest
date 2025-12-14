@@ -1,14 +1,14 @@
 import { useEffect, useState, type JSX } from "react";
-import { accountDelete, accountDetails } from "../api/user";
-import type { User } from "../types/user.type";
-import ls from "../utils/ls.util";
-import Loading from "../components/MyLoading";
-import UserImage from "../assets/user.avif"
+import { accountDelete, accountDetails } from "../../api/user";
+import type { User } from "../../types/user.type";
+import ls from "../../utils/ls.util";
+import Loading from "../../components/MyLoading";
+import UserImage from "../../assets/user.avif"
 import Button from "@mui/material/Button";
 import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { ApiFunction } from "../utils/apifunction.util";
+import { ApiFunction } from "../../utils/apifunction.util";
 import toast from "react-hot-toast";
 function UserPage(): JSX.Element {
   const [data, setData] = useState<User>({
