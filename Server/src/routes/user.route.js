@@ -4,7 +4,7 @@ import user from "../controllers/user.controller.js";
 
 const Userroute = express.Router();
 
-Userroute.get("/details", verifytoken, user.Details);
-Userroute.delete("/delete", verifytoken, user.Delete);
+Userroute.get("/", verifytoken, user.GET);
+Userroute.delete("/", verifytoken, user.DELETE);
 
 export default Userroute;

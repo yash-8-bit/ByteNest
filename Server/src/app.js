@@ -1,9 +1,9 @@
 import express from "express";
-import Userauthroute from "./routes/auth.route.js";
+import Authroute from "./routes/auth.route.js";
 import Userfileroute from "./routes/userfile.route.js";
 import cors from "cors";
 import './config/dotenv.config.js'
-import Userroute from "./routes/user.js";
+import Userroute from "./routes/user.route.js";
 const app = express();
 app.use(
   cors({
@@ -12,7 +12,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/api/userauth", Userauthroute);
+app.use("/api/auth", Authroute);
 app.use("/api/userfile", Userfileroute);
 app.use("/api/user", Userroute);
 

@@ -8,7 +8,7 @@ A full-stack web application for securely uploading, downloading, and managing f
 * 📤 Upload Files
 * 📥 Download Files
 * ❌ Delete Files
-* 🌐 Responsive UI with DaisyUI & Tailwind CSS
+* 🌐 Responsive UI with DaisyUI & Tailwind CSS & Material UI
 
 ---
 
@@ -68,16 +68,16 @@ cd  ByteNest
 
 ```bash
 cd Server
-pnpm install
-pnpm run dev
+pnpm i
+pnpm  dev
 ```
 
 ### 3. Setup Frontend
 
 ```bash
 cd Client
-pnpm install
-pnpm run dev
+pnpm i
+pnpm dev
 ```
 
 ---
@@ -102,15 +102,6 @@ Ensure the following environment variables are set in your backend `.env` file:
 | Variable                | Description                                      |
 | ----------------------- | ------------------------------------------------ |
 | `VITE_API_URL`          | API URL used in the frontend (for Vite proxying) |
-
----
-
-## 🧠 Future Improvements
-
-* 🔄 Pagination for uploaded files
-* 🧾 File previews (images, text)
-* ⏳ Upload progress bar
-* 🔗 Shareable download links
 
 ---
 

@@ -5,7 +5,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.DBURI,{
       dbName : "byte-nest-db"
     });
-    console.info("MongoDB connected successfully");
+    console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
   }

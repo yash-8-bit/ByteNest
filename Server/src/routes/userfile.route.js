@@ -6,13 +6,13 @@ import verifytoken from "../middleware/auth.middleware.js";
 const Userfileroute = express.Router();
 
 Userfileroute.post(
-  "/upload-file",
+  "/",
   verifytoken,
   middlewarefile.countfile,
   middlewarefile.upload.single("__file__"),
-  userfile.uploadfile
+  userfile.POST
 );
-Userfileroute.delete("/delete-file/:_id", verifytoken, userfile.deletefile);
-Userfileroute.get("/get-files", verifytoken, userfile.getfiles);
+Userfileroute.delete("/:_id", verifytoken, userfile.DELETE);
+Userfileroute.get("/", verifytoken, userfile.GET);
 
 export default Userfileroute;

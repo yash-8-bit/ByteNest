@@ -9,5 +9,5 @@ const Fileschema = mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-const Userfile = mongoose.model("user_data_file", Fileschema);
+const Userfile = mongoose.model("userfile", Fileschema);
 export default Userfile;

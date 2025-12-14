@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Userschema = mongoose.Schema({
   name: {
     type: String,
-    required: false,
+    required: [true , "name is required"],
   },
   username: {
     type: String,
@@ -12,10 +12,9 @@ const Userschema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Password is required"],
-    unique: true,
+    required: [true, "Password is required"]
   },
 });
 
-const User = mongoose.model("user_data", Userschema);
+const User = mongoose.model("user", Userschema);
 export default User;
