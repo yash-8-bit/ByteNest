@@ -4,7 +4,6 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 import dbFunction from "../util/dbfunction.util.js";
-import randtoken from "rand-token"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,12 +29,16 @@ async function POST(req, res) {
         }
       );
       fs.unlinkSync(dirpath);
+      const token = crypto.randomUUID();
       const userfile = await Userfile({
         username: username,
         url: result.secure_url,
         name: filename,
         filepublicid: result.public_id,
         filetype: result.resource_type,
+        share : {
+          token
+        }
       });
       await userfile.save();
       res.status(201).json({ message: "File Uploaded Successfully" });
@@ -95,7 +98,7 @@ async function PUT(req, res) {
     main: async () => {
       const { _id } = req.params;
       const username = req.user;
-      const token = randtoken.generate(16);
+      const token = crypto.randomUUID();
       await Userfile.findOneAndUpdate({ _id, username }, {
         share: {
           token,

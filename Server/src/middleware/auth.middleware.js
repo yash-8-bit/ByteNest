@@ -6,10 +6,9 @@ async function verifytoken(req, res, next) {
     if (!token)
       return req.status(400).json({ message: "Token Required" });
     const decoded = jwt.verify(token, process.env.JWT_KEY);
-    req.user = decoded.username;
+    req.user = decoded;
     next();
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
     res.status(401).json({ message: "Invalid Token" });
   }
 }
