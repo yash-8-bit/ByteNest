@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type JSX } from "react";
+import { useState, type JSX } from "react";
 import Dropzone from "react-dropzone";
 import { tc } from "../../../components/style/main";
 import {  useNavigate } from "react-router";
@@ -24,11 +24,11 @@ const FileDropZone = ({ setvalue }: any) => {
          border-gray-300 hover:border-gray-500 transition-all"
         >
           <div className="p-8 cursor-pointer py-15" {...getRootProps()}>
-            <input required {...getInputProps()} />
-            <p className={`${tc} font text-center text-xl font-medium opacity-40`}>
+            <input required  {...getInputProps()} />
+            <p className={`${tc} text-center text-xl opacity-40`}>
               {fileName == ""
                 ? "Drag & drop file here, or click to select file"
-                : `FileName :  ${fileName}`}
+                : `file name :  ${fileName}`}
             </p>
           </div>
         </section>
@@ -43,7 +43,7 @@ function UploadPage(): JSX.Element {
   const [newFileName, setNewFileName] = useState<string>("");
   const [isloading, setIsloading] = useState(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: any) => {
     await ApiFunction({
       callback: async () => {
         e.preventDefault();
@@ -66,15 +66,21 @@ function UploadPage(): JSX.Element {
       {isloading && (
         <Loading />
       )}
-      <div className="flex justify-center items-center h-[80vh]">
-        <div className="p-4 border rounded dark:border-gray-100/30 border-gray-200 shadow-xl">
+      <div className="flex p-4 justify-center items-center h-[80vh]">
+        <div className="p-4 min-w-auto md:min-w-xl border dark:border-gray-100/30 border-gray-400">
           <form onSubmit={handleSubmit} className="flex  flex-col gap-3">
-            <p className={`${tc} font text-center font-semibold`}>File - Form</p>
+            <p className={`${tc}  text-center`}>Manage Your File</p>
             <TextField
               value={newFileName}
+              size="small"
               label="Enter Filename"
               onChange={(e) => setNewFileName(e.target.value)}
               required
+              slotProps={{
+                htmlInput : {
+                  maxLength : 35
+                }
+              }}
             />
             <FileDropZone setvalue={setFilevalue} />
             <Button variant="contained" type="submit" >Submit</Button>

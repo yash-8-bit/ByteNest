@@ -53,7 +53,7 @@ function OneFile() {
                 <CiFileOn size={40} />
               </span>
               <div
-                className="pt-5 font text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
+                className="pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
                 <p className=''>
                   file name - {data?.name}
                 </p>

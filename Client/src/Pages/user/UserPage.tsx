@@ -21,14 +21,14 @@ function UserPage(): JSX.Element {
     await ApiFunction({
       callback: async () => {
         await accountDelete();
-        ls.ls1.reset();
+        ls.tokenStore.reset();
         toast.success("Deleted Successfully");
       },
       setLoading: setIsloading
     });
   };
   const handleLogout = () => {
-    ls.ls1.reset();
+    ls.tokenStore.reset();
     location.reload();
     toast.success("Logout Successfully")
   };
@@ -54,11 +54,11 @@ function UserPage(): JSX.Element {
           <div className="p-3">
             <div className="flex flex-col h-full">
               <div className={`h-full flex flex-col  justify-center  text-black p-3 rounded`}>
-                <div className="grid grid-cols-2 w-full font">
-                  <p className="border p-2 text-center rounded-tl-xl">Name</p>
-                  <p className="border p-2 text-center rounded-tr-xl">UserName</p>
-                  <p className="border p-2 text-center rounded-bl-xl">{data.name}</p>
-                  <p className="border p-2 text-center rounded-br-xl">{data.username}</p>
+                <div className="grid grid-cols-2 w-full">
+                  <p className="border p-2 text-center ">Name</p>
+                  <p className="border p-2 text-center ">UserName</p>
+                  <p className="border p-2 text-center ">{data.name}</p>
+                  <p className="border p-2 text-center ">{data.username}</p>
                 </div>
 
               </div>

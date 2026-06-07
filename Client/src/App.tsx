@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Navbar from "./Navbar/Navbar";
 import Home from "./Pages/Home";
 import Upload from "./Pages/user/file/UploadPage";
-import { Webapp } from "./Context/Webapp";
+import { Theme } from "./Context/Theme";
 import Authform from "./Pages/auth/Authform";
 import UserHome from "./Pages/user/HomePage";
 import MyToast from "./components/MyToast";
@@ -12,7 +12,7 @@ import OneFile from "./Pages/user/file/OneFile";
 
 function App() {
   return (
-    <Webapp>
+    <Theme>
       <MyToast />
       <Mythemeprovider>
         <BrowserRouter>
@@ -26,13 +26,13 @@ function App() {
             <Route element={<Navbar />}>
               <Route path="/home" element={<UserHome />} />
               <Route path="/upload-file" element={<Upload />} />
-              <Route path="/user" element={<UserPage />} />
+              <Route path="/account" element={<UserPage />} />
             </Route>
-              <Route path="/share-file" element={<OneFile />} />
+            <Route path="/share-file" element={<OneFile />} />
           </Routes>
         </BrowserRouter>
       </Mythemeprovider>
-    </Webapp>
+    </Theme>
   );
 }
 

@@ -1,6 +1,6 @@
-import { useContext, useState, type FormEvent, type JSX } from "react";
+import { useContext, useState, type JSX } from "react";
 import type { UserAuthType } from "../../types/user.type";
-import { WebappContext } from "../../Context/Webapp";
+import { ThemeContext } from "../../Context/Theme";
 import { commonbg, tc } from "../../components/style/main";
 import { Link, useNavigate } from "react-router";
 import { login, register } from "../../api/userauth.api";
@@ -10,6 +10,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { ApiFunction } from "../../utils/apifunction.util";
 import MySwitch from "../../components/style/theme/MySwitch";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import toast from "react-hot-toast";
 
 const NavigatePart = ({
   link, text
@@ -17,10 +22,10 @@ const NavigatePart = ({
   link: { text: string, href: string },
   text: string
 }) => (
-  <p className={`text-center font text-sm mb-2 ${tc}`}>
+  <p className={`text-center  text-base mb-1.5 mt-1 ${tc}`}>
     {text}
     <Link
-      className="hover:text-red-400 text-red-500 ml-2"
+      className="hover:text-blue-600 text-blue-500 ml-2 underline"
       to={link.href}
     >
       {link.text}
@@ -31,6 +36,7 @@ const NavigatePart = ({
 function Authform({ type }: { type: string }): JSX.Element {
   const navigate = useNavigate();
   const [isloading, setIsloading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [formdata, setFormdata] = useState<UserAuthType>({
     name: "",
     username: "",
@@ -41,14 +47,17 @@ function Authform({ type }: { type: string }): JSX.Element {
     setFormdata((form) => ({ ...form, [e.target.name]: e.target.value }))
   }
 
-  const context = useContext(WebappContext);
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const context = useContext(ThemeContext);
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     await ApiFunction({
       callback: async () => {
         e.preventDefault();
         const data = type === "login" ? await login(formdata) : await register(formdata);
-        ls.ls1.set(data.token);
-        navigate("/home")
+        ls.tokenStore.set(data.token);
+        toast.loading("Redirecting...")
+        setTimeout(() => {
+          navigate("/home")
+        }, 3000);
       },
       setLoading: setIsloading
     })
@@ -60,55 +69,92 @@ function Authform({ type }: { type: string }): JSX.Element {
     >
       {isloading && <Loading />}
 
-      <div className="border dark:border-white/30 hover:shadow-xl border-gray-300 min-h-72 w-full md:w-120   rounded-xl ">
-        <div className="p-3 pb-0 items-center flex">
-          <h1 className={`${tc} font-serif w-full text-center text-xl font-medium `}>
-            {type == "login" ? "Login" : "Register"}
+      <div className="border dark:border-white/30 border-gray-400 w-full md:w-120  ">
+        <div className="p-3  items-center flex">
+          <h1 className={`${tc} w-full text-center text-xl underline  `}>
+            {type == "login" ? "Login" : "Register Your Profile"}
           </h1>
-          <MySwitch change={context.ChangeTheme} />
+          <MySwitch />
         </div>
-        <div className="h-full p-4 w-full grid place-items-center">
+        <div className="px-4 ">
           <div className="w-full">
-          <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
-            {type == "register" && (
+            <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+              {type == "register" && (
+                <TextField required className={`w-full ${tc}`}
+                  size="small" name="name" type="text"
+                  value={formdata.name}
+                  onChange={handleChange}
+                  slotProps={{
+                    htmlInput: {
+                      minLength: 3,
+                      maxLength: 20
+                    }
+                  }}
+                  label={"Enter name"} variant="outlined" />
+              )}
               <TextField required className={`w-full ${tc}`}
-                size="small" name="name" type="text"
-                value={formdata.name}
+                size="small" name="username"
+                type="text"
+                value={formdata.username}
                 onChange={handleChange}
-                label={"Enter name"} variant="outlined" />
-            )}
-            <TextField required className={`w-full ${tc}`}
-              size="small" name="username"
-              type="text"
-              value={formdata.username}
-              onChange={handleChange}
-              label={"Enter username"} variant="outlined" />
-            <TextField required className={`w-full ${tc}`}
-              size="small" name="password"
-              type="password"
-              value={formdata.password}
-              onChange={handleChange}
-              label={"Enter password"} variant="outlined"
+                slotProps={{
+                  htmlInput: {
+                    minLength: 3,
+                    maxLength: 50
+                  }
+                }}
+                label={"Enter username"} variant="outlined" />
+              <TextField required className={`w-full ${tc}`}
+                size="small" name="password"
+                value={formdata.password}
 
-            />
-            <div className="grid place-items-center">
+                slotProps={{
+                  htmlInput: {
+                    minLength: 6
+                  },
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label={
+                            showPassword ? 'hide the password' : 'display the password'
+                          }
+                          onClick={()=> setShowPassword((p)=> !p)}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
+
+                }}
+                type={showPassword ? 'text' : 'password'}
+
+
+                onChange={handleChange}
+                label={"Enter password"} variant="outlined"
+
+              />
               <Button
                 className=""
                 type="submit"
-                variant="contained"
+                sx={{
+                  width: 100,
+                  margin: "0 auto"
+                }}
+                variant="outlined"
                 size="small"
                 loading={isloading}
               >Submit</Button>
-            </div>
-            {type == "login" ? (
-              <NavigatePart text="No account?" link={{ text: "register", href: "/auth/register" }} />
-
-            ) : (
-              <NavigatePart text="already have account?" link={{ text: "login", href: "/auth/login" }} />
-
-            )}
-          </form>
+            </form>
           </div>
+          {type == "login" ? (
+            <NavigatePart text="No account?" link={{ text: "register", href: "/auth/register" }} />
+          ) : (
+            <NavigatePart text="Already have an account?" link={{ text: "login", href: "/auth/login" }} />
+
+          )}
         </div>
       </div>
     </div>

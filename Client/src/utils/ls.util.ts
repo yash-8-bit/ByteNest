@@ -15,6 +15,6 @@ class Localstorage {
   }
 }
 
-const ls1 = new Localstorage("authtoken");
-const ls2 = new Localstorage("local_theme");
-export default { ls1, ls2 };
+const tokenStore = new Localstorage("authtoken");
+const localThemeStore = new Localstorage("local_theme");
+export default { tokenStore, localThemeStore };
