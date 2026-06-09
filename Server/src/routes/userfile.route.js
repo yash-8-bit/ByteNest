@@ -12,9 +12,9 @@ Userfileroute.post(
   middlewarefile.upload.single("__file__"),
   userfile.POST
 );
-Userfileroute.delete("/:_id", verifytoken, userfile.DELETE);
+Userfileroute.delete("/:id", verifytoken, userfile.DELETE);
 Userfileroute.get("/", verifytoken, userfile.GET);
-Userfileroute.put("/:_id", verifytoken, userfile.PUT);
+Userfileroute.put("/:id", verifytoken, userfile.PUT);
 Userfileroute.get("/one", userfile.getOneByToken);
 
 

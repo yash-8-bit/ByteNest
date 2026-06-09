@@ -6,8 +6,14 @@ async function GET(req, res) {
   dbFunction({
     main: async () => {
       const { _id } = req.user;
-      const data = await User.findById(_id, "name username");
-      res.status(200).json({ data });
+      const user = await User.findById(_id, "name username");
+      const totalfile = await Userfile.countDocuments({UserId : _id})
+      res.status(200).json({ data:{
+        name : user.name,
+        username :user.username,
+        totalfile
+
+      } });
     },
     res: res
   })

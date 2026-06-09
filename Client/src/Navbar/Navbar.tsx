@@ -22,7 +22,7 @@ function Navbar(): JSX.Element {
     <div className={`${context.Theme} ${commonbg} h-screen transition-colors`}>
       <div className="flex justify-between p-2 items-center">
         <div>
-          <p className={`${tc} font-medium text-xl`}>D F</p>
+          <p className={`${tc} font-medium text-xl`}>Drop Fest</p>
         </div>
         <div >
           <ul
@@ -30,7 +30,7 @@ function Navbar(): JSX.Element {
           >
             {data.map((item) => (
               <li key={item.text}>
-                <Link className={`${tc} hover:text-red-500 text-base `} to={item.href}>
+                <Link className={`${tc} hover:text-blue-500 text-base `} to={item.href}>
                   {item.text}
                 </Link>
               </li>

@@ -15,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import toast from "react-hot-toast";
+import { NameInput, UserNameInput } from "./_components/inputs";
 
 const NavigatePart = ({
   link, text
@@ -54,7 +55,9 @@ function Authform({ type }: { type: string }): JSX.Element {
         e.preventDefault();
         const data = type === "login" ? await login(formdata) : await register(formdata);
         ls.tokenStore.set(data.token);
-        toast.loading("Redirecting...")
+        toast.loading("Redirecting...", {
+          duration: 3
+        })
         setTimeout(() => {
           navigate("/home")
         }, 3000);
@@ -80,30 +83,9 @@ function Authform({ type }: { type: string }): JSX.Element {
           <div className="w-full">
             <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
               {type == "register" && (
-                <TextField required className={`w-full ${tc}`}
-                  size="small" name="name" type="text"
-                  value={formdata.name}
-                  onChange={handleChange}
-                  slotProps={{
-                    htmlInput: {
-                      minLength: 3,
-                      maxLength: 20
-                    }
-                  }}
-                  label={"Enter name"} variant="outlined" />
+                <NameInput value={formdata.name || ""} onChange={handleChange} />
               )}
-              <TextField required className={`w-full ${tc}`}
-                size="small" name="username"
-                type="text"
-                value={formdata.username}
-                onChange={handleChange}
-                slotProps={{
-                  htmlInput: {
-                    minLength: 3,
-                    maxLength: 50
-                  }
-                }}
-                label={"Enter username"} variant="outlined" />
+              <UserNameInput value={formdata.username} onChange={handleChange} />
               <TextField required className={`w-full ${tc}`}
                 size="small" name="password"
                 value={formdata.password}
@@ -119,7 +101,7 @@ function Authform({ type }: { type: string }): JSX.Element {
                           aria-label={
                             showPassword ? 'hide the password' : 'display the password'
                           }
-                          onClick={()=> setShowPassword((p)=> !p)}
+                          onClick={() => setShowPassword((p) => !p)}
                           edge="end"
                         >
                           {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -130,8 +112,6 @@ function Authform({ type }: { type: string }): JSX.Element {
 
                 }}
                 type={showPassword ? 'text' : 'password'}
-
-
                 onChange={handleChange}
                 label={"Enter password"} variant="outlined"
 

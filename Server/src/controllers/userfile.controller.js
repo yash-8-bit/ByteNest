@@ -1,12 +1,7 @@
 import cloudinary from "../config/cloudinary.config.js";
 import Userfile from "../models/Userfile.js";
-import fs from "fs";
-import { fileURLToPath } from "url";
-import path from "path";
 import dbFunction from "../util/dbfunction.util.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const compareDate = (date) => {
   const givenTime = new Date(date);
@@ -16,37 +11,33 @@ const compareDate = (date) => {
 }
 
 async function POST(req, res) {
-  const username = req.user;
-  const filenamelocal = username + "_x_" + path.extname(req.file.originalname);
-  const dirpath = path.join(__dirname, "../../", "tmpfile", filenamelocal);
+  const { _id } = req.user;
   dbFunction({
     main: async () => {
       const { filename } = req.body;
-      const result = await cloudinary.uploader.upload(
-        dirpath,
-        {
-          resource_type: "auto",
-        }
-      );
-      fs.unlinkSync(dirpath);
+      if (!filename.trim()) return req.status(400).json({ message: "FileName is Required" })
+      if (!req.file) return req.status(400).json({ message: "File is Required" })
+      const uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({ folder: "byteNestFiles", resource_type: "auto" }, (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }).end(req.file.buffer);
+      });
       const token = crypto.randomUUID();
       const userfile = await Userfile({
-        username: username,
-        url: result.secure_url,
+        UserId: _id,
+        url: uploadResult.secure_url,
         name: filename,
-        filepublicid: result.public_id,
-        filetype: result.resource_type,
-        share : {
+        filepublicid: uploadResult.public_id,
+        filetype: uploadResult.resource_type,
+        share: {
           token
         }
       });
       await userfile.save();
       res.status(201).json({ message: "File Uploaded Successfully" });
     },
-    res: res,
-    forerror: () => {
-      fs.unlinkSync(dirpath);
-    }
+    res: res
   })
 
 }
@@ -54,23 +45,23 @@ async function POST(req, res) {
 async function DELETE(req, res) {
   dbFunction({
     main: async () => {
-      const _id = req.params._id;
-      const username = req.user;
-      const data = await Userfile.findOne({ _id: _id, username });
+      const id = req.params.id;
+      const { _id } = req.user;
+      const data = await Userfile.findOne({ _id: id, UserId: _id });
+      if (!data) return req.status(400).json({ message: "User Not Found" })
       await cloudinary.uploader.destroy(data.filepublicid, {
         resource_type: data.filetype,
       });
-      await Userfile.deleteOne({ _id: _id, username });
+      await Userfile.deleteOne({ _id: id, UserId: _id });
       res.status(200).json({ message: "File Deleted Successfully" });
     },
     res: res
   })
 }
-
 async function GET(req, res) {
   dbFunction({
     main: async () => {
-      const data = await Userfile.find({ username: req.user },
+      const data = await Userfile.find({ UserId: req.user._id },
         "name url filetype"
       );
       res.status(200).json({ data });
@@ -82,12 +73,21 @@ async function getOneByToken(req, res) {
   dbFunction({
     main: async () => {
       const { token } = req.query;
+      if (!token) return res.status(400).json({ "message": "Invalid Url" });
       const data = await Userfile.findOne({
-        "share.token": token
-      }, "share _id name url filetype username");
+        "share.token": token,
+      }, "share _id name url filetype").populate("UserId", "username");
       if (!data) return res.status(404).json({ "message": "file not found" });
       if (compareDate(data.share.expire_at))
-        return res.status(200).json({ data });
+        return res.status(200).json({
+          data: {
+            _id: data._id,
+            name: data.name,
+            url: data.url,
+            filetype: data.filetype,
+            username: data.UserId.username
+          }
+        });
       res.status(404).json({ "message": "Link Expired" });
     }
   })
@@ -96,10 +96,10 @@ async function getOneByToken(req, res) {
 async function PUT(req, res) {
   dbFunction({
     main: async () => {
-      const { _id } = req.params;
-      const username = req.user;
+      const { id } = req.params;
+      const { _id } = req.user;
       const token = crypto.randomUUID();
-      await Userfile.findOneAndUpdate({ _id, username }, {
+      await Userfile.findOneAndUpdate({ _id: id, UserId: _id }, {
         share: {
           token,
           expire_at: new Date()

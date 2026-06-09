@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 
-const Fileschema = mongoose.Schema({
+const Fileschema = new mongoose.Schema({
   name: { type: String, required: true },
-  username: { type: String, required: true },
+  UserId : { type: Schema.Types.ObjectId, ref: 'user' },
   url: { type: String, required: true },
   filepublicid: { type: String, required: true },
   filetype: { type: String, required: true },
