@@ -1,19 +1,19 @@
-# 📁 Byte-Nest (File Uploader App)
+# Byte-Nest (File Uploader App)
 
 A full-stack web application for securely uploading, downloading, and managing files. Users can register, log in, upload files, delete files, and download them anytime.
 
-## 🚀 Features
+## Features
 
-* 🔐 User Registration & Login (Authentication)
-* 📤 Upload Files
-* 📥 Download Files
-* ❌ Delete Files
-* 🌐 Responsive UI with DaisyUI & Tailwind CSS & Material UI
-* 🔒 Protected File Sharing – Securely share files
+* User Registration & Login (Authentication)
+* Upload Files
+* Download Files
+* Delete Files
+* Responsive UI with DaisyUI & Tailwind CSS & Material UI
+* Protected File Sharing – Securely share files
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend:
 
@@ -32,7 +32,7 @@ A full-stack web application for securely uploading, downloading, and managing f
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 project-root/
@@ -57,7 +57,7 @@ project-root/
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Clone the Repository
 
@@ -84,7 +84,7 @@ pnpm dev
 
 ---
 
-## 🔐 Environment Variables
+## Environment Variables
 
 Ensure the following environment variables are set in your backend `.env` file:
 
@@ -107,7 +107,7 @@ Ensure the following environment variables are set in your backend `.env` file:
 | `VITE_CLIENT_URL`       | Frontend URL used in share link                  |
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](https://github.com/yash-8-bit/ByteNest/blob/main/LICENSE).
 

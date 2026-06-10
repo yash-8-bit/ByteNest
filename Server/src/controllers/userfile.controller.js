@@ -14,9 +14,12 @@ async function POST(req, res) {
   const { _id } = req.user;
   dbFunction({
     main: async () => {
+      
       const { filename } = req.body;
-      if (!filename.trim()) return req.status(400).json({ message: "FileName is Required" })
-      if (!req.file) return req.status(400).json({ message: "File is Required" })
+      if (!filename.trim()) return res.status(400).json({ message: "FileName is Required" })
+        const checkExist = await Userfile.findOne({name : filename,UserId:_id},"_id");
+      if(checkExist) return res.status(400).json({ message: "This File is Already Exist" })
+      if (!req.file) return res.status(400).json({ message: "File is Required" })
       const uploadResult = await new Promise((resolve, reject) => {
         cloudinary.uploader.upload_stream({ folder: "byteNestFiles", resource_type: "auto" }, (error, result) => {
           if (error) return reject(error);
@@ -48,7 +51,7 @@ async function DELETE(req, res) {
       const id = req.params.id;
       const { _id } = req.user;
       const data = await Userfile.findOne({ _id: id, UserId: _id });
-      if (!data) return req.status(400).json({ message: "User Not Found" })
+      if (!data) return res.status(400).json({ message: "User Not Found" })
       await cloudinary.uploader.destroy(data.filepublicid, {
         resource_type: data.filetype,
       });

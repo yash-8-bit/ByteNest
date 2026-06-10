@@ -1,21 +1,19 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useId, useState, type JSX } from "react";
 import { accountDelete, accountDetails, accountupdate } from "../../api/user";
 import type { User } from "../../types/user.type";
 import ls from "../../utils/ls.util";
 import Loading from "../../components/MyLoading";
 import Button from "@mui/material/Button";
-import LogoutIcon from '@mui/icons-material/Logout';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloseIcon from '@mui/icons-material/Close';
-
-
 import { ApiFunction } from "../../utils/apifunction.util";
 import toast from "react-hot-toast";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { NameInput, UserNameInput } from "../auth/_components/inputs";
-import Icon from "@mui/material/Icon";
+import DialogContent from "@mui/material/DialogContent";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import MyBottomNavigation from "../../components/MyBottomNavigation";
 
 const RowData = ({ title, value }: {
   title: string;
@@ -44,12 +42,26 @@ function UserPage(): JSX.Element {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setUpdated((form) => ({ ...form, [e.target.name]: e.target.value }))
   }
+  const id = useId();
+  const buttonId = `${id}-button`;
+  const menuId = `${id}-menu`;
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const handleDelete = async () => {
     await ApiFunction({
       callback: async () => {
         await accountDelete();
         ls.tokenStore.reset();
         toast.success("Deleted Successfully");
+        setTimeout(() => {
+          location.href = "/";
+        }, 1000);
       },
       setLoading: setIsloading
     });
@@ -72,8 +84,10 @@ function UserPage(): JSX.Element {
   };
   const handleLogout = () => {
     ls.tokenStore.reset();
-    location.reload();
     toast.success("Logout Successfully")
+    setTimeout(() => {
+      location.href = "/";
+    }, 1000);
   };
   useEffect(() => {
     const get = async () => {
@@ -92,26 +106,25 @@ function UserPage(): JSX.Element {
     <><Dialog
       open={isUpdateOpen}
     >
-      <DialogTitle className="p-2! text-center" id="alert-dialog-title">
+      <DialogTitle id="alert-dialog-title">
         Update Profile
-        <Icon onClick={() => setIsupdateOpen(false)} autoFocus>
-          <CloseIcon  />
-        </Icon>
       </DialogTitle>
-      <form className="flex flex-col gap-2 p-2" onSubmit={handleUpdate}>
-
-        <NameInput value={upadated.name || ""} onChange={handleChange} />
-        <UserNameInput value={upadated.username} onChange={handleChange} />
-        <Button
-          type="submit"
-          variant="outlined"
-          size="small"
-          loading={isloading}
-        >Update</Button>
-        
-      </form>
+      <DialogContent>
+        <form id="update-form" className="flex flex-col gap-2 p-2" onSubmit={handleUpdate}>
+          <NameInput value={upadated.name || ""} onChange={handleChange} />
+          <UserNameInput value={upadated.username} onChange={handleChange} />
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => { setIsupdateOpen(false); setUpdated(data) }}>Cancel</Button>
+        <Button type="submit" form="update-form">
+          Update
+        </Button>
+      </DialogActions>
     </Dialog>
-      <div className="flex justify-center text-2xl px-3 mt-2">
+      <div className="flex justify-center  text-2xl px-3 mt-2">
+        <MyBottomNavigation />
+
         {isloading && <Loading />}
         <Dialog open={isOpen} >
           <DialogTitle id="alert-dialog-title">
@@ -128,7 +141,7 @@ function UserPage(): JSX.Element {
         </Dialog>
 
 
-        <div className="grid md:grid-cols-2 grid-cols-1">
+        <div className="grid md:grid-cols-2 min-w-full md:min-w-4xl grid-cols-1">
           <div className="bg-[#aeaf95]">
             <span className="grid capitalize place-items-center h-full text-[13vh] dark:text-black/40 text-white/40">
               {data.name?.[0]}
@@ -141,15 +154,33 @@ function UserPage(): JSX.Element {
               <RowData title="TotalFiles" value={data.totalfile} />
             </div>
             <div className="mt-5">
-              <Button onClick={() => { setIsupdateOpen(true) }} variant="contained">
-                Update Profile
+              <Button
+                id={buttonId}
+                aria-controls={open ? menuId : undefined}
+                aria-haspopup="true"
+                aria-expanded={open}
+                fullWidth
+
+                variant="contained"
+                onClick={handleClick}
+              >
+                Options
               </Button>
-              <Button onClick={() => { setType("logout"); setIsOpen(true) }} color="warning" variant="outlined" startIcon={<LogoutIcon />}>
-                Log Out
-              </Button>
-              <Button onClick={() => { setType("delete"); setIsOpen(true) }} color="error" variant="outlined" startIcon={<DeleteIcon />}>
-                Delete
-              </Button>
+              <Menu
+                id={menuId}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                slotProps={{
+                  list: {
+                    'aria-labelledby': buttonId,
+                  },
+                }}
+              >
+                <MenuItem onClick={() => setIsupdateOpen(true)}>Update Profile</MenuItem>
+                <MenuItem onClick={() => { setType("delete"); setIsOpen(true) }}>Delete Account</MenuItem>
+                <MenuItem onClick={() => { setType("logout"); setIsOpen(true) }}>Logout</MenuItem>
+              </Menu>
             </div>
           </div>
         </div>

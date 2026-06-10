@@ -9,7 +9,7 @@ Userfileroute.post(
   "/",
   verifytoken,
   middlewarefile.countfile,
-  middlewarefile.upload.single("__file__"),
+  middlewarefile.uploadMiddleware,
   userfile.POST
 );
 Userfileroute.delete("/:id", verifytoken, userfile.DELETE);

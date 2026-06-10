@@ -39,7 +39,7 @@ export const UserNameInput = ({
             slotProps={{
                 htmlInput: {
                     minLength: 3,
-                    maxLength: 50
+                    maxLength: 15
                 }
             }}
             label={"Enter username"} variant="outlined" />

@@ -17,6 +17,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import MyBottomNavigation from "../../components/MyBottomNavigation";
 function HomePage(): JSX.Element {
   const [data, setData] = useState<UserFileType[]>([]);
   const [isloading, setIsloading] = useState<boolean>(false);
@@ -62,7 +63,7 @@ function HomePage(): JSX.Element {
     <>
       {isloading && <Loading />}
 
-      <Dialog open={isOpen} onClose={()=> setShareUrl("")}>
+      <Dialog open={isOpen} onClose={() => setShareUrl("")}>
         <DialogTitle id="alert-dialog-title">
           {"Copy, Share and Enjoy"}
         </DialogTitle>
@@ -80,6 +81,7 @@ function HomePage(): JSX.Element {
       </Dialog>
 
       <div className="flex justify-center px-3 min-h-[80vh]">
+        <MyBottomNavigation />
         <div className="w-[50rem]">
 
           <div className="border border-gray-400 mt-2 ">
@@ -104,6 +106,7 @@ function HomePage(): JSX.Element {
                       <IconButton title="Download File">
                         <a
                           href={getDownloadUrl(item.url)}
+                          target="_blank"
                         >
                           <DownloadIcon />
                         </a>

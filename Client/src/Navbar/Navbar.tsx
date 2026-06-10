@@ -18,13 +18,15 @@ function Navbar(): JSX.Element {
     run();
   }, []);
   const context = useContext(ThemeContext);
+  const width = window.innerWidth;
+  
   return (
     <div className={`${context.Theme} ${commonbg} h-screen transition-colors`}>
       <div className="flex justify-between p-2 items-center">
         <div>
           <p className={`${tc} font-medium text-xl`}>Drop Fest</p>
         </div>
-        <div >
+       {width>=700 && <div >
           <ul
             className="flex gap-2"
           >
@@ -36,7 +38,7 @@ function Navbar(): JSX.Element {
               </li>
             ))}
           </ul>
-        </div>
+        </div>}
 
         <div>
           <MySwitch />

@@ -4,7 +4,7 @@ async function verifytoken(req, res, next) {
   try {
     const token = req.headers["authorization"].split(" ")[1];
     if (!token)
-      return req.status(400).json({ message: "Token Required" });
+      return res.status(400).json({ message: "Token is Required" });
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     req.user = decoded;
     next();

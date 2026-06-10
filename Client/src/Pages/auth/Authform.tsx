@@ -2,7 +2,7 @@ import { useContext, useState, type JSX } from "react";
 import type { UserAuthType } from "../../types/user.type";
 import { ThemeContext } from "../../Context/Theme";
 import { commonbg, tc } from "../../components/style/main";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { login, register } from "../../api/userauth.api";
 import ls from "../../utils/ls.util";
 import Loading from "../../components/MyLoading";
@@ -35,7 +35,6 @@ const NavigatePart = ({
 )
 
 function Authform({ type }: { type: string }): JSX.Element {
-  const navigate = useNavigate();
   const [isloading, setIsloading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [formdata, setFormdata] = useState<UserAuthType>({
@@ -56,10 +55,10 @@ function Authform({ type }: { type: string }): JSX.Element {
         const data = type === "login" ? await login(formdata) : await register(formdata);
         ls.tokenStore.set(data.token);
         toast.loading("Redirecting...", {
-          duration: 3
+          duration: 3000
         })
         setTimeout(() => {
-          navigate("/home")
+          location.href = "/home"
         }, 3000);
       },
       setLoading: setIsloading
